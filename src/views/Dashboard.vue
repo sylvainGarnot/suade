@@ -1,6 +1,8 @@
 <template>
     <div class="app">
-        <pie-chart :data="chartdata" :options="options" />
+        <input v-model="values[0]" />
+        <button @click="fillChart()">Update</button>
+        <pie-chart :chart-data="chartdata" :options="options" />
     </div>
 </template>
 
@@ -12,7 +14,22 @@ export default {
     data() {
         return {
             loading: true,
-            chartdata: {
+            chartdata: null,
+            options: null,
+            values: [40, 39, 10, 40, 39]
+        };
+    },
+    components: {
+        PieChart
+    },
+    mounted() {
+        // this.fetchData();
+        this.fillChart();
+    },
+    methods: {
+        fillChart() {
+            console.log('fill')
+            this.chartdata = {
                 labels: [
                     "January",
                     "February",
@@ -29,11 +46,11 @@ export default {
                             'green',
                             'blue'
                         ],
-                        data: [40, 39, 10, 40, 39]
+                        data: this.values
                     }
                 ]
             },
-            options: {
+            this.options = {
                 responsive: true,
                 maintainAspectRatio: false,
                 legend: {
@@ -46,38 +63,30 @@ export default {
                     enabled: false
                 }
             }
-        };
-    },
-    components: {
-        PieChart
-    },
-    mounted() {
-        this.fetchData();
-    },
-    methods: {
-        fetchData() {
-            this.result = this.$resource(
-                "files/people.json",
-                {},
-                {},
-                {
-                    before: () => {
-                        this.loading = true;
-                    },
-                    after: () => {
-                        this.loading = false;
-                    }
-                }
-            );
-            this.result.query().then(
-                response => {
-                    console.log("json response", response.data);
-                },
-                response => {
-                    console.log("error !", response);
-                }
-            );
         }
+        // fetchData() {
+        // this.result = this.$resource(
+        //     "files/people.json",
+        //     {},
+        //     {},
+        //     {
+        //         before: () => {
+        //             this.loading = true;
+        //         },
+        //         after: () => {
+        //             this.loading = false;
+        //         }
+        //     }
+        // );
+        // this.result.query().then(
+        //     response => {
+        //         console.log("json response", response.data);
+        //     },
+        //     response => {
+        //         console.log("error !", response);
+        //     }
+        // );
+        // }
     }
 };
 </script>
