@@ -1,7 +1,5 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="app">
     <line-chart
       :chartdata="chartdata"
       :options="options"/>
@@ -9,12 +7,10 @@
 </template>
 
 <script>
-import HelloWorld from "@/components/HelloWorld.vue"
 import LineChart from '../components/LineChart.vue'
 
-
 export default {
-  name: "Home",
+  name: "Dashboard",
   data() {
     return {
       loading: true,
@@ -43,7 +39,6 @@ export default {
     };
   },
   components: {
-    HelloWorld,
     LineChart
   },
   mounted() {
@@ -52,7 +47,7 @@ export default {
   methods: {
     fetchData() {
       this.result = this.$resource(
-        "people.json",
+        "files/people.json",
         {},
         {},
         {

@@ -4,10 +4,8 @@ import router from './router'
 import VueResource from 'vue-resource'
 
 Vue.config.productionTip = false
-
-
 Vue.use(VueResource)
-Vue.http.options.root = 'https://updates.suade.org/files/'
+Vue.http.options.root = 'https://updates.suade.org/'
 
 Vue.http.interceptors.push((request, next) => {
   next((response) => {
@@ -17,18 +15,7 @@ Vue.http.interceptors.push((request, next) => {
   })
 })
 
-
-
 new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
-
-// new Vue({
-//   el: '#app',
-//   router,
-//   components: {
-//     App
-//   },
-//   template: '<App/>'
-// })
