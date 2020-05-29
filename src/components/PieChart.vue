@@ -2,8 +2,8 @@
 import Charts from "vue-chartjs";
 
 export default {
-    extends: Charts.Line,
-    name: "LineChart",
+    extends: Charts.Pie,
+    name: "PieChart",
     props: {
         data: {
             type: Object,
