@@ -1,7 +1,7 @@
 <template>
     <div class="app">
-        <input v-model="values[0]" />
-        <button @click="fillChart()">Update</button>
+        <input v-model="genderData[0]" @keyup.enter="fillChart()" />
+        <button @click="fillChart()">Update Male number</button>
         <pie-chart :chart-data="chartdata" :options="options" />
     </div>
 </template>
@@ -13,80 +13,77 @@ export default {
     name: "Dashboard",
     data() {
         return {
-            loading: true,
             chartdata: null,
-            options: null,
-            values: [40, 39, 10, 40, 39]
-        };
-    },
-    components: {
-        PieChart
-    },
-    mounted() {
-        // this.fetchData();
-        this.fillChart();
-    },
-    methods: {
-        fillChart() {
-            console.log('fill')
-            this.chartdata = {
-                labels: [
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May"
-                ],
-                datasets: [
-                    {
-                        backgroundColor: [
-                            'red',
-                            'orange',
-                            'yellow',
-                            'green',
-                            'blue'
-                        ],
-                        data: this.values
-                    }
-                ]
-            },
-            this.options = {
-                responsive: true,
-                maintainAspectRatio: false,
+            genderLabels: ["male", "female"],
+            genderBackgroundColor: ["orange", "cyan"],
+            genderData: [0, 0],
+            loading: true,
+            options: {
                 legend: {
                     display: true,
                     labels: {
                         padding: 20
                     }
                 },
-                tooltips: {
-                    enabled: false
+                maintainAspectRatio: false,
+                responsive: true
+            },
+            people: null
+        };
+    },
+    components: {
+        PieChart
+    },
+    mounted() {
+        this.fetchData();
+    },
+    methods: {
+        fetchData() {
+            this.result = this.$resource(
+                "files/people.json",
+                {},
+                {},
+                {
+                    before: () => {
+                        this.loading = true;
+                    },
+                    after: () => {
+                        this.loading = false;
+                    }
+                }
+            );
+            this.result.query().then(
+                response => {
+                    this.people = response.data
+                    this.countGender()
+                    this.fillChart()
+                },
+                response => {
+                    console.log("error !", response)
+                }
+            );
+        },
+        fillChart() {
+            this.chartdata = {
+                labels: this.genderLabels,
+                datasets: [
+                    {
+                        backgroundColor: this.genderBackgroundColor,
+                        data: this.genderData
+                    }
+                ]
+            };
+        },
+        countGender() {
+            this.genderData = [0, 0]
+            for (const person of this.people) {
+                if (person.gender === "male") {
+                    this.genderData[0]++
+                } else if (person.gender === "female") {
+                    this.genderData[1]++
                 }
             }
         }
-        // fetchData() {
-        // this.result = this.$resource(
-        //     "files/people.json",
-        //     {},
-        //     {},
-        //     {
-        //         before: () => {
-        //             this.loading = true;
-        //         },
-        //         after: () => {
-        //             this.loading = false;
-        //         }
-        //     }
-        // );
-        // this.result.query().then(
-        //     response => {
-        //         console.log("json response", response.data);
-        //     },
-        //     response => {
-        //         console.log("error !", response);
-        //     }
-        // );
-        // }
     }
 };
 </script>
