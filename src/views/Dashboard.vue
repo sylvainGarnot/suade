@@ -2,7 +2,8 @@
     <div class="app">
         <input v-model="genderData[0]" @keyup.enter="fillChart()" />
         <button @click="fillChart()">Update Male number</button>
-        <pie-chart :chart-data="chartdata" :options="options" />
+        <pie-chart :chart-data="eyeColorChartData" :options="options" />
+        <pie-chart :chart-data="genderChartData" :options="options" />
     </div>
 </template>
 
@@ -13,10 +14,14 @@ export default {
     name: "Dashboard",
     data() {
         return {
-            chartdata: null,
+            eyeColorLabels: ["brown", "blue", "green"],
+            eyeColorBackgroundColor: ["brown", "blue", "green"],
+            eyeColorData: [0, 0, 0],
+            eyeColorChartData: null,
             genderLabels: ["male", "female"],
             genderBackgroundColor: ["orange", "cyan"],
             genderData: [0, 0],
+            genderChartData: null,
             loading: true,
             options: {
                 legend: {
@@ -56,6 +61,7 @@ export default {
                 response => {
                     this.people = response.data
                     this.countGender()
+                    this.countEyeColor()
                     this.fillChart()
                 },
                 response => {
@@ -64,7 +70,7 @@ export default {
             );
         },
         fillChart() {
-            this.chartdata = {
+            this.genderChartData = {
                 labels: this.genderLabels,
                 datasets: [
                     {
@@ -73,6 +79,27 @@ export default {
                     }
                 ]
             };
+            this.eyeColorChartData = {
+                labels: this.eyeColorLabels,
+                datasets: [
+                    {
+                        backgroundColor: this.eyeColorBackgroundColor,
+                        data: this.eyeColorData
+                    }
+                ]
+            };
+        },
+        countEyeColor() {
+            this.eyeColorData = [0, 0, 0]
+            for (const person of this.people) {
+                if (person.eyeColor === "brown") {
+                    this.eyeColorData[0]++
+                } else if (person.eyeColor === "blue") {
+                    this.eyeColorData[1]++
+                } else if (person.eyeColor === "green") {
+                    this.eyeColorData[2]++
+                }
+            }
         },
         countGender() {
             this.genderData = [0, 0]
