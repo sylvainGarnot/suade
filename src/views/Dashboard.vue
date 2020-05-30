@@ -1,7 +1,9 @@
 <template>
     <div class="app">
-        <!-- <input v-model="genderData[0]" @keyup.enter="fillChart()" /> -->
-        <!-- <button @click="fillChart()">Update Male number</button> -->
+        <!-- test update -->
+        <input v-model="genderData[0]" @keyup.enter="fillChart()" />
+        <button @click="fillChart()">Update Male number</button>
+
         <!-- <bar-chart :chart-data="genderChartData" :options="options" /> -->
         <pie-chart :chart-data="genderChartData" :options="options" />
         <pie-chart :chart-data="eyeColorChartData" :options="options" />
@@ -33,17 +35,17 @@ export default {
 
             // EyeColor
             eyeColorLabels: ["brown", "blue", "green"],
-            eyeColorData: null,
+            eyeColorData: [0, 0, 0],
             eyeColorChartData: null,
 
             // Gender
             genderLabels: ["male", "female"],
-            genderData: null,
+            genderData: [0, 0],
             genderChartData: null,
 
             // Preferences Fruit
             preferencesFruitLabels: ["apple", "mango", "strawberry"],
-            preferencesFruitData: null,
+            preferencesFruitData: [0, 0, 0],
             preferencesFruitChartData: null,
 
             // Preference Pet
