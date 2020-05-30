@@ -5,6 +5,7 @@
         <pie-chart :chart-data="eyeColorChartData" :options="options" />
         <pie-chart :chart-data="genderChartData" :options="options" />
         <pie-chart :chart-data="preferencesPetChartData" :options="options" />
+        <pie-chart :chart-data="preferencesFruitChartData" :options="options" />
     </div>
 </template>
 
@@ -23,6 +24,10 @@ export default {
             genderBackgroundColor: ["white", "grey"],
             genderData: [0, 0],
             genderChartData: null,
+            preferencesFruitLabels: ["apple", "mango", "strawberry"],
+            preferencesFruitBackgroundColor: ["green", "yellow", "red"],
+            preferencesFruitData: [0, 0, 0],
+            preferencesFruitChartData: null,
             preferencesPetLabels: ["cat", "dog", "bird", "none"],
             preferencesPetBackgroundColor: ["cyan", "pink", "orange", "grey"],
             preferencesPetData: [0, 0, 0, 0],
@@ -67,6 +72,7 @@ export default {
                     this.people = response.data
                     this.countGender()
                     this.countEyeColor()
+                    this.countPreferencesFruit()
                     this.countPreferencesPet()
                     this.fillChart()
                 },
@@ -76,6 +82,15 @@ export default {
             );
         },
         fillChart() {
+            this.eyeColorChartData = {
+                labels: this.eyeColorLabels,
+                datasets: [
+                    {
+                        backgroundColor: this.eyeColorBackgroundColor,
+                        data: this.eyeColorData
+                    }
+                ]
+            };
             this.genderChartData = {
                 labels: this.genderLabels,
                 datasets: [
@@ -85,12 +100,12 @@ export default {
                     }
                 ]
             };
-            this.eyeColorChartData = {
-                labels: this.eyeColorLabels,
+            this.preferencesFruitChartData = {
+                labels: this.preferencesFruitLabels,
                 datasets: [
                     {
-                        backgroundColor: this.eyeColorBackgroundColor,
-                        data: this.eyeColorData
+                        backgroundColor: this.preferencesFruitBackgroundColor,
+                        data: this.preferencesFruitData
                     }
                 ]
             };
@@ -123,6 +138,18 @@ export default {
                     this.genderData[0]++
                 } else if (person.gender === "female") {
                     this.genderData[1]++
+                }
+            }
+        },
+        countPreferencesFruit() {
+            this.preferencesFruitData = [0, 0, 0]
+            for (const person of this.people) {
+                if (person.preferences.fruit === "apple") {
+                    this.preferencesFruitData[0]++
+                } else if (person.preferences.fruit === "mango") {
+                    this.preferencesFruitData[1]++
+                } else if (person.preferences.fruit === "strawberry") {
+                    this.preferencesFruitData[2]++
                 }
             }
         },
