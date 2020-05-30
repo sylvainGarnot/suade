@@ -29,6 +29,6 @@ export default {
 }
 
 body {
-    background: grey;
+    background: black;
 }
 </style>

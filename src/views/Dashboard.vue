@@ -4,14 +4,21 @@
         <input v-model="genderData[0]" @keyup.enter="fillChart()" />
         <button @click="fillChart()">Update Male number</button>
 
-        <!-- bar chart -->
-        <bar-chart :chart-data="genderChartData" :options="optionsBarChart" />
+        <bar-chart v-if="!genderChartPie" :chart-data="genderChartData" :options="optionsBarChart" />
+        <pie-chart v-if="genderChartPie" :chart-data="genderChartData" :options="optionsPieChart"/>
+        <button @click="genderChartPie = !genderChartPie">{{ genderChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
 
-        <!-- pie chart -->
-        <pie-chart :chart-data="genderChartData" :options="optionsPieChart" />
-        <pie-chart :chart-data="eyeColorChartData" :options="optionsPieChart" />
-        <pie-chart :chart-data="preferencesPetChartData" :options="optionsPieChart" />
-        <pie-chart :chart-data="preferencesFruitChartData" :options="optionsPieChart" />
+        <bar-chart v-if="!eyeColorChartPie" :chart-data="eyeColorChartData" :options="optionsBarChart" />
+        <pie-chart v-if="eyeColorChartPie" :chart-data="eyeColorChartData" :options="optionsPieChart" />
+        <button @click="eyeColorChartPie = !eyeColorChartPie">{{ eyeColorChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
+
+        <bar-chart v-if="!preferencesPetChartPie" :chart-data="preferencesPetChartData" :options="optionsBarChart" />
+        <pie-chart v-if="preferencesPetChartPie" :chart-data="preferencesPetChartData" :options="optionsPieChart" />
+        <button @click="preferencesPetChartPie = !preferencesPetChartPie">{{ preferencesPetChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
+
+        <bar-chart v-if="!preferencesFruitChartPie" :chart-data="preferencesFruitChartData" :options="optionsBarChart" />
+        <pie-chart v-if="preferencesFruitChartPie" :chart-data="preferencesFruitChartData" :options="optionsPieChart" />
+        <button @click="preferencesFruitChartPie = !preferencesFruitChartPie">{{ preferencesFruitChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
     </div>
 </template>
 
@@ -24,28 +31,34 @@ export default {
     data() {
         return {
             // Base color
-            backgroundColorRed: "rgba(255, 99, 132, 0.2)",
-            backgroundColorBlue: "rgba(54, 162, 235, 0.2)",
-            backgroundColorGreen: "rgba(75, 192, 192, 0.2)",
-            backgroundColorOrange: "rgba(255, 159, 64, 0.2)",
-            backgroundColorPurple: "rgba(153, 102, 255, 0.2)",
+            backgroundColor: "black",
+            colorRed: "rgba(255, 99, 132, 0.2)",
+            colorBlue: "rgba(54, 162, 235, 0.2)",
+            colorGreen: "rgba(75, 192, 192, 0.2)",
+            colorOrange: "rgba(255, 159, 64, 0.2)",
+            colorPurple: "rgba(153, 102, 255, 0.2)",
+
 
             // EyeColor
+            eyeColorChartPie: true,
             eyeColorLabels: ["brown", "blue", "green"],
             eyeColorData: [0, 0, 0],
             eyeColorChartData: null,
 
             // Gender
+            genderChartPie: true,
             genderLabels: ["male", "female"],
             genderData: [0, 0],
             genderChartData: null,
 
             // Preferences Fruit
+            preferencesPetChartPie: true,
             preferencesFruitLabels: ["apple", "mango", "strawberry"],
             preferencesFruitData: [0, 0, 0],
             preferencesFruitChartData: null,
 
             // Preference Pet
+            preferencesFruitChartPie: true,
             preferencesPetLabels: ["cat", "dog", "bird", "none"],
             preferencesPetData: [0, 0, 0, 0],
             preferencesPetChartData: null,
@@ -116,10 +129,11 @@ export default {
                     {
                         data: this.eyeColorData,
                         backgroundColor: [
-                            this.backgroundColorOrange,
-                            this.backgroundColorBlue,
-                            this.backgroundColorGreen
-                        ]
+                            this.colorOrange,
+                            this.colorBlue,
+                            this.colorGreen
+                        ],
+                        borderColor: this.backgroundColor
                     }
                 ]
             };
@@ -129,9 +143,10 @@ export default {
                     {
                         data: this.genderData,
                         backgroundColor: [
-                            this.backgroundColorBlue,
-                            this.backgroundColorRed
-                        ]
+                            this.colorBlue,
+                            this.colorRed
+                        ],
+                        borderColor: this.backgroundColor
                     }
                 ]
             };
@@ -141,10 +156,11 @@ export default {
                     {
                         data: this.preferencesFruitData,
                         backgroundColor: [
-                            this.backgroundColorGreen,
-                            this.backgroundColorOrange,
-                            this.backgroundColorRed
-                        ]
+                            this.colorGreen,
+                            this.colorOrange,
+                            this.colorRed
+                        ],
+                        borderColor: this.backgroundColor
                     }
                 ]
             };
@@ -154,11 +170,12 @@ export default {
                     {
                         data: this.preferencesPetData,
                         backgroundColor: [
-                            this.backgroundColorBlue,
-                            this.backgroundColorGreen,
-                            this.backgroundColorOrange,
-                            this.backgroundColorPurple
-                        ]
+                            this.colorBlue,
+                            this.colorGreen,
+                            this.colorOrange,
+                            this.colorPurple
+                        ],
+                        borderColor: this.backgroundColor
                     }
                 ]
             };
