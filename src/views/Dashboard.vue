@@ -1,9 +1,10 @@
 <template>
     <div class="app">
-        <input v-model="genderData[0]" @keyup.enter="fillChart()" />
-        <button @click="fillChart()">Update Male number</button>
-        <pie-chart :chart-data="eyeColorChartData" :options="options" />
+        <!-- <input v-model="genderData[0]" @keyup.enter="fillChart()" /> -->
+        <!-- <button @click="fillChart()">Update Male number</button> -->
+        <!-- <bar-chart :chart-data="genderChartData" :options="options" /> -->
         <pie-chart :chart-data="genderChartData" :options="options" />
+        <pie-chart :chart-data="eyeColorChartData" :options="options" />
         <pie-chart :chart-data="preferencesPetChartData" :options="options" />
         <pie-chart :chart-data="preferencesFruitChartData" :options="options" />
     </div>
@@ -11,25 +12,42 @@
 
 <script>
 import PieChart from "../components/PieChart.vue";
+// import BarChart from "../components/BarChart.vue";
 
 export default {
     name: "Dashboard",
     data() {
         return {
+            backgroundColorRed: 'rgba(255, 99, 132, 0.2)',
+            backgroundColorBlue: 'rgba(54, 162, 235, 0.2)',
+            backgroundColorGreen: 'rgba(255, 206, 86, 0.2)',
+            backgroundColorYellow: 'rgba(75, 192, 192, 0.2)',
+            backgroundColorPurple: 'rgba(153, 102, 255, 0.2)',
+            backgroundColorOrange: 'rgba(255, 159, 64, 0.2)',
+            borderColorRed: 'rgba(255, 99, 132, 0.9)',
+            borderColorBlue: 'rgba(54, 162, 235, 0.9)',
+            borderColorGreen: 'rgba(255, 206, 86, 0.9)',
+            borderColorYellow: 'rgba(75, 192, 192, 0.9)',
+            borderColorPurple: 'rgba(153, 102, 255, 0.9)',
+            borderColorOrange: 'rgba(255, 159, 64, 0.9)',
+
+            // EyeColor
             eyeColorLabels: ["brown", "blue", "green"],
-            eyeColorBackgroundColor: ["brown", "blue", "green"],
-            eyeColorData: [0, 0, 0],
+            eyeColorData: null,
             eyeColorChartData: null,
+
+            // Gender
             genderLabels: ["male", "female"],
-            genderBackgroundColor: ["white", "grey"],
-            genderData: [0, 0],
+            genderData: null,
             genderChartData: null,
+
+            // Preferences Fruit
             preferencesFruitLabels: ["apple", "mango", "strawberry"],
-            preferencesFruitBackgroundColor: ["green", "yellow", "red"],
-            preferencesFruitData: [0, 0, 0],
+            preferencesFruitData: null,
             preferencesFruitChartData: null,
+
+            // Preference Pet
             preferencesPetLabels: ["cat", "dog", "bird", "none"],
-            preferencesPetBackgroundColor: ["cyan", "pink", "orange", "grey"],
             preferencesPetData: [0, 0, 0, 0],
             preferencesPetChartData: null,
             loading: true,
@@ -47,7 +65,8 @@ export default {
         };
     },
     components: {
-        PieChart
+        PieChart,
+        // BarChart
     },
     mounted() {
         this.fetchData();
@@ -86,8 +105,8 @@ export default {
                 labels: this.eyeColorLabels,
                 datasets: [
                     {
-                        backgroundColor: this.eyeColorBackgroundColor,
-                        data: this.eyeColorData
+                        data: this.eyeColorData,
+                        backgroundColor: [this.backgroundColorOrange, this.backgroundColorBlue, this.backgroundColorGreen]
                     }
                 ]
             };
@@ -95,8 +114,8 @@ export default {
                 labels: this.genderLabels,
                 datasets: [
                     {
-                        backgroundColor: this.genderBackgroundColor,
-                        data: this.genderData
+                        data: this.genderData,
+                        backgroundColor: [this.backgroundColorBlue, this.backgroundColorRed]
                     }
                 ]
             };
@@ -104,8 +123,8 @@ export default {
                 labels: this.preferencesFruitLabels,
                 datasets: [
                     {
-                        backgroundColor: this.preferencesFruitBackgroundColor,
-                        data: this.preferencesFruitData
+                        data: this.preferencesFruitData,
+                        backgroundColor: [this.backgroundColorGreen, this.backgroundColorOrange, this.backgroundColorRed]
                     }
                 ]
             };
@@ -113,8 +132,8 @@ export default {
                 labels: this.preferencesPetLabels,
                 datasets: [
                     {
-                        backgroundColor: this.preferencesPetBackgroundColor,
-                        data: this.preferencesPetData
+                        data: this.preferencesPetData,
+                        backgroundColor: [this.backgroundColorBlue, this.backgroundColorGreen, this.backgroundColorYellow, this.backgroundColorPurple]
                     }
                 ]
             };
@@ -122,11 +141,11 @@ export default {
         countEyeColor() {
             this.eyeColorData = [0, 0, 0]
             for (const person of this.people) {
-                if (person.eyeColor === "brown") {
+                if (person.eyeColor === this.eyeColorLabels[0]) {
                     this.eyeColorData[0]++
-                } else if (person.eyeColor === "blue") {
+                } else if (person.eyeColor === this.eyeColorLabels[1]) {
                     this.eyeColorData[1]++
-                } else if (person.eyeColor === "green") {
+                } else if (person.eyeColor === this.eyeColorLabels[2]) {
                     this.eyeColorData[2]++
                 }
             }
@@ -134,9 +153,9 @@ export default {
         countGender() {
             this.genderData = [0, 0]
             for (const person of this.people) {
-                if (person.gender === "male") {
+                if (person.gender === this.genderLabels[0]) {
                     this.genderData[0]++
-                } else if (person.gender === "female") {
+                } else if (person.gender === this.genderLabels[1]) {
                     this.genderData[1]++
                 }
             }
@@ -144,11 +163,11 @@ export default {
         countPreferencesFruit() {
             this.preferencesFruitData = [0, 0, 0]
             for (const person of this.people) {
-                if (person.preferences.fruit === "apple") {
+                if (person.preferences.fruit === this.preferencesFruitLabels[0]) {
                     this.preferencesFruitData[0]++
-                } else if (person.preferences.fruit === "mango") {
+                } else if (person.preferences.fruit === this.preferencesFruitLabels[1]) {
                     this.preferencesFruitData[1]++
-                } else if (person.preferences.fruit === "strawberry") {
+                } else if (person.preferences.fruit === this.preferencesFruitLabels[2]) {
                     this.preferencesFruitData[2]++
                 }
             }
@@ -156,13 +175,13 @@ export default {
         countPreferencesPet() {
             this.preferencesPetData = [0, 0, 0, 0]
             for (const person of this.people) {
-                if (person.preferences.pet === "cat") {
+                if (person.preferences.pet === this.preferencesPetLabels[0]) {
                     this.preferencesPetData[0]++
-                } else if (person.preferences.pet === "dog") {
+                } else if (person.preferences.pet === this.preferencesPetLabels[1]) {
                     this.preferencesPetData[1]++
-                } else if (person.preferences.pet === "bird") {
+                } else if (person.preferences.pet === this.preferencesPetLabels[2]) {
                     this.preferencesPetData[2]++
-                } else if (person.preferences.pet === "none") {
+                } else if (person.preferences.pet ===this.preferencesPetLabels[3]) {
                     this.preferencesPetData[3]++
                 }
             }
