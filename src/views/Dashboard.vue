@@ -18,16 +18,16 @@ export default {
     name: "Dashboard",
     data() {
         return {
+
+            // Base color
             backgroundColorRed: 'rgba(255, 99, 132, 0.2)',
             backgroundColorBlue: 'rgba(54, 162, 235, 0.2)',
-            backgroundColorGreen: 'rgba(255, 206, 86, 0.2)',
-            backgroundColorYellow: 'rgba(75, 192, 192, 0.2)',
+            backgroundColorGreen: 'rgba(75, 192, 192, 0.2)',
             backgroundColorPurple: 'rgba(153, 102, 255, 0.2)',
             backgroundColorOrange: 'rgba(255, 159, 64, 0.2)',
             borderColorRed: 'rgba(255, 99, 132, 0.9)',
             borderColorBlue: 'rgba(54, 162, 235, 0.9)',
-            borderColorGreen: 'rgba(255, 206, 86, 0.9)',
-            borderColorYellow: 'rgba(75, 192, 192, 0.9)',
+            borderColorGreen: 'rgba(75, 192, 192, 0.9)',
             borderColorPurple: 'rgba(153, 102, 255, 0.9)',
             borderColorOrange: 'rgba(255, 159, 64, 0.9)',
 
@@ -51,6 +51,8 @@ export default {
             preferencesPetData: [0, 0, 0, 0],
             preferencesPetChartData: null,
             loading: true,
+
+            // Options
             options: {
                 legend: {
                     display: true,
@@ -133,7 +135,7 @@ export default {
                 datasets: [
                     {
                         data: this.preferencesPetData,
-                        backgroundColor: [this.backgroundColorBlue, this.backgroundColorGreen, this.backgroundColorYellow, this.backgroundColorPurple]
+                        backgroundColor: [this.backgroundColorBlue, this.backgroundColorGreen, this.backgroundColorOrange, this.backgroundColorPurple]
                     }
                 ]
             };
