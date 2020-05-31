@@ -5,8 +5,8 @@
         <button @click="fillChart()">Update Male number</button>
 
         <!-- test 2 -->
-        <button @click="test1()">test 1</button>
-        <button @click="test2()">test 2</button>
+        <button @click="updateFilter('gender', 'male')">male</button>
+        <button @click="updateFilter('preferencesFruit', 'apple')">female</button>
 
         <bar-chart v-if="!genderChartPie" :chart-data="genderChartData" :options="optionsBarChart" />
         <pie-chart v-if="genderChartPie" :chart-data="genderChartData" :options="optionsPieChart" />
@@ -88,8 +88,8 @@ export default {
 
             // Preferences Fruit
             preferencesPetChartPie: true,
-            preferencesFruitLabels: ["apple", "mango", "strawberry"],
-            preferencesFruitData: [0, 0, 0],
+            preferencesFruitLabels: ["apple", "mango", "strawberry", "banana"],
+            preferencesFruitData: [0, 0, 0, 0],
             preferencesFruitChartData: null,
 
             // Preference Pet
@@ -103,16 +103,15 @@ export default {
             filter: {
                 eyeColor: [],
                 gender: [],
-                preferences: {
-                    pet: [],
-                    fruit: []
-                }
+                preferencesPet: [],
+                preferencesFruit: []
             },
 
             // Options
             optionsPieChart: {
                 legend: {
                     display: true,
+                    onClick: null,
                     labels: { padding: 20 }
                 },
                 maintainAspectRatio: false,
@@ -139,14 +138,6 @@ export default {
         this.fetchData();
     },
     methods: {
-        test1() {
-            this.filter.gender.push("male");
-            this.fetchData();
-        },
-        test2() {
-            this.filter.eyeColor.push("blue");
-            this.fetchData();
-        },
         fetchData() {
             this.result = this.$resource(
                 "files/people.json",
@@ -163,7 +154,7 @@ export default {
             );
             this.result.query().then(
                 response => {
-                    this.people = this.listFilter(response.data);
+                    this.people = this.toFilter(response.data);
                     this.fillCharts();
                 },
                 response => {
@@ -217,7 +208,8 @@ export default {
                         backgroundColor: [
                             this.colorGreen,
                             this.colorOrange,
-                            this.colorRed
+                            this.colorRed,
+                            this.colorBlue
                         ],
                         borderColor: this.backgroundColor
                     }
@@ -245,82 +237,96 @@ export default {
         countEyeColorData() {
             this.eyeColorData = [0, 0, 0];
             for (const person of this.people) {
-                if (person.eyeColor === this.eyeColorLabels[0]) {
-                    this.eyeColorData[0]++;
-                } else if (person.eyeColor === this.eyeColorLabels[1]) {
-                    this.eyeColorData[1]++;
-                } else if (person.eyeColor === this.eyeColorLabels[2]) {
-                    this.eyeColorData[2]++;
+                for (let index = 0; index < this.eyeColorLabels.length; index++) {
+                    if (
+                        this.eyeColorLabels[index] &&
+                        person.eyeColor === this.eyeColorLabels[index]
+                    ) {
+                        this.eyeColorData[index]++;
+                    }
                 }
             }
         },
         countGenderData() {
             this.genderData = [0, 0];
             for (const person of this.people) {
-                if (
-                    this.genderLabels[0] &&
-                    person.gender === this.genderLabels[0]
-                ) {
-                    this.genderData[0]++;
-                } else if (
-                    this.genderLabels[1] &&
-                    person.gender === this.genderLabels[1]
-                ) {
-                    this.genderData[1]++;
+                for (let index = 0; index < this.genderLabels.length; index++) {
+                    if (
+                        this.genderLabels[index] &&
+                        person.gender === this.genderLabels[index]
+                    ) {
+                        this.genderData[index]++;
+                    }
                 }
             }
         },
         countPreferencesFruitData() {
-            this.preferencesFruitData = [0, 0, 0];
+            this.preferencesFruitData = [0, 0, 0, 0];
             for (const person of this.people) {
-                if (
-                    person.preferences.fruit === this.preferencesFruitLabels[0]
+                for (
+                    let index = 0;
+                    index < this.preferencesFruitLabels.length;
+                    index++
                 ) {
-                    this.preferencesFruitData[0]++;
-                } else if (
-                    person.preferences.fruit === this.preferencesFruitLabels[1]
-                ) {
-                    this.preferencesFruitData[1]++;
-                } else if (
-                    person.preferences.fruit === this.preferencesFruitLabels[2]
-                ) {
-                    this.preferencesFruitData[2]++;
+                    if (
+                        this.preferencesFruitLabels[index] &&
+                        person.preferences.fruit ===
+                            this.preferencesFruitLabels[index]
+                    ) {
+                        this.preferencesFruitData[index]++;
+                    }
                 }
             }
         },
         countPreferencesPetData() {
             this.preferencesPetData = [0, 0, 0, 0];
             for (const person of this.people) {
-                if (person.preferences.pet === this.preferencesPetLabels[0]) {
-                    this.preferencesPetData[0]++;
-                } else if (
-                    person.preferences.pet === this.preferencesPetLabels[1]
+                for (
+                    let index = 0;
+                    index < this.preferencesPetLabels.length;
+                    index++
                 ) {
-                    this.preferencesPetData[1]++;
-                } else if (
-                    person.preferences.pet === this.preferencesPetLabels[2]
-                ) {
-                    this.preferencesPetData[2]++;
-                } else if (
-                    person.preferences.pet === this.preferencesPetLabels[3]
-                ) {
-                    this.preferencesPetData[3]++;
+                    if (
+                        this.preferencesPetLabels[index] &&
+                        person.preferences.pet ===
+                            this.preferencesPetLabels[index]
+                    ) {
+                        this.preferencesPetData[index]++;
+                    }
                 }
             }
         },
-        listFilter(list) {
+        toFilter(list) {
             let result = [];
             for (const p of list) {
                 if (
                     !this.filter.gender.includes(p.gender) &&
                     !this.filter.eyeColor.includes(p.eyeColor) &&
-                    !this.filter.preferences.fruit.includes(p.preferences.fruit) &&
-                    !this.filter.preferences.pet.includes(p.preferences.pet)
+                    !this.filter.preferencesFruit.includes(
+                        p.preferences.fruit
+                    ) &&
+                    !this.filter.preferencesPet.includes(p.preferences.pet)
                 ) {
                     result.push(p);
                 }
             }
             return result;
+        },
+        updateFilter(property, value) {
+            if (!this.filter[property].includes(value)) {
+                this.filter[property].push(value);
+            } else {
+                for (
+                    let index = 0;
+                    index < this.filter[property].length;
+                    index++
+                ) {
+                    if (this.filter[property][index] === value) {
+                        this.filter[property].splice(index, 1);
+                    }
+                }
+            }
+            this.fetchData();
         }
     }
 };
