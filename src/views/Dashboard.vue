@@ -115,7 +115,7 @@ export default {
                     labels: { padding: 20 }
                 },
                 maintainAspectRatio: false,
-                responsive: true
+                responsive: false
             },
             optionsBarChart: {
                 legend: {
