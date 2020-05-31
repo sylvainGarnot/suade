@@ -8,50 +8,22 @@
         <button @click="updateFilter('gender', 'male')">male</button>
         <button @click="updateFilter('preferencesFruit', 'apple')">female</button>
 
-        <bar-chart v-if="!genderChartPie" :chart-data="genderChartData" :options="optionsBarChart" />
-        <pie-chart v-if="genderChartPie" :chart-data="genderChartData" :options="optionsPieChart" />
+        <global-chart :chart-data="genderChartData" :pie-mode="genderChartPie" :title="'Genre'" />
         <button
             @click="genderChartPie = !genderChartPie"
         >{{ genderChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
 
-        <bar-chart
-            v-if="!eyeColorChartPie"
-            :chart-data="eyeColorChartData"
-            :options="optionsBarChart"
-        />
-        <pie-chart
-            v-if="eyeColorChartPie"
-            :chart-data="eyeColorChartData"
-            :options="optionsPieChart"
-        />
+        <global-chart :chart-data="eyeColorChartData" :pie-mode="eyeColorChartPie" :title="'Couleur des yeux'" />
         <button
             @click="eyeColorChartPie = !eyeColorChartPie"
         >{{ eyeColorChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
 
-        <bar-chart
-            v-if="!preferencesPetChartPie"
-            :chart-data="preferencesPetChartData"
-            :options="optionsBarChart"
-        />
-        <pie-chart
-            v-if="preferencesPetChartPie"
-            :chart-data="preferencesPetChartData"
-            :options="optionsPieChart"
-        />
+        <global-chart :chart-data="preferencesPetChartData" :pie-mode="preferencesPetChartPie" :title="'Animal de compagnie préféré'" />
         <button
             @click="preferencesPetChartPie = !preferencesPetChartPie"
         >{{ preferencesPetChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
 
-        <bar-chart
-            v-if="!preferencesFruitChartPie"
-            :chart-data="preferencesFruitChartData"
-            :options="optionsBarChart"
-        />
-        <pie-chart
-            v-if="preferencesFruitChartPie"
-            :chart-data="preferencesFruitChartData"
-            :options="optionsPieChart"
-        />
+        <global-chart :chart-data="preferencesFruitChartData" :pie-mode="preferencesFruitChartPie" :title="'Fruit préféré'" />
         <button
             @click="preferencesFruitChartPie = !preferencesFruitChartPie"
         >{{ preferencesFruitChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
@@ -59,8 +31,7 @@
 </template>
 
 <script>
-import PieChart from "../components/PieChart.vue";
-import BarChart from "../components/BarChart.vue";
+import GlobalChart from "../components/GlobalChart.vue";
 
 export default {
     name: "Dashboard",
@@ -107,7 +78,7 @@ export default {
                 preferencesFruit: []
             },
 
-            // Options
+            // Options to delete
             optionsPieChart: {
                 legend: {
                     display: true,
@@ -131,8 +102,7 @@ export default {
         };
     },
     components: {
-        PieChart,
-        BarChart
+        GlobalChart
     },
     mounted() {
         this.fetchData();
