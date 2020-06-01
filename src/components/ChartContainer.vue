@@ -18,7 +18,7 @@ export default {
             optionsPie: {
                 legend: {
                     display: true,
-                    onClick: null,
+                    onClick: this.legendOnClick,
                     labels: { padding: 20 }
                 },
                 maintainAspectRatio: false,
@@ -54,6 +54,13 @@ export default {
     components: {
         ChartPie,
         ChartBar
+    },
+    methods: {
+        legendOnClick(e, legendItem) {
+            console.log('legend item', legendItem)
+            console.log(this.chartData.labels[legendItem.index])
+
+        }
     }
 };
 </script>
