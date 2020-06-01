@@ -1,16 +1,12 @@
 <template>
     <div>
-        <!-- test 1 -->
-        <input v-model="genderData[0]" @keyup.enter="fillChart()" />
-        <button @click="fillChart()">Update Male number</button>
-
         <!-- test 2 -->
-        <button @click="updateFilter('gender', 'male')">male</button>
-        <button @click="updateFilter('preferencesFruit', 'apple')">female</button>
+        <button @click="updateFilterGender('male'); fillCharts();">male</button>
+        <button @click="updateFilterEyeColor('blue'); fillCharts();">blue</button>
 
         <v-row no-gutters>
             <v-col cols="12" sm="4">
-                <chart-container :chart-data="genderChartData" :pie-mode="true" :title="'Genre' + filterGender" />
+                <chart-container :chart-data="genderChartData" :pie-mode="true" :title="'Genre'" />
 
                 <chart-container
                     :chart-data="eyeColorChartData"
@@ -34,7 +30,7 @@
             </v-col>
 
             <v-col cols="12" sm="4">
-                <average-ages :people="people" :title="'Âge moyen'" />
+                <average-ages :people="peopleLocal" :title="'Âge moyen'" />
             </v-col>
         </v-row>
     </div>
@@ -43,7 +39,7 @@
 <script>
 import ChartContainer from "../components/ChartContainer.vue";
 import AverageAges from "../components/AverageAges.vue";
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 
 export default {
     name: "Dashboard",
@@ -53,8 +49,12 @@ export default {
     },
     computed: {
         ...mapState({
-            filterGender: state => state.filter.gender,
-            filterEyeColor: state => state.filter.eyeColor,
+            people: state => state.people.all,
+            peopleLocal: state => state.people.local,
+            filterEyeColor: state => state.people.filterEyeColor,
+            filterGender: state => state.people.filterGender,
+            filterPreferencesFruit: state => state.people.filterPreferencesFruit,
+            filterPreferencesPet: state => state.people.filterPreferencesPet,
         })
     },
     data() {
@@ -91,53 +91,29 @@ export default {
             preferencesPetLabels: ["cat", "dog", "bird", "none"],
             preferencesPetData: [0, 0, 0, 0],
             preferencesPetChartData: null,
-            loading: true,
-
-            // Filter
-            filter: {
-                eyeColor: [],
-                gender: [],
-                preferencesPet: [],
-                preferencesFruit: []
-            },
-            newPeople: [],
-            people: []
+            loading: true
         };
     },
     mounted() {
         this.fetchData();
-        this.setGender('test')
     },
     methods: {
-        ...mapActions('filter', [
-            'setGender'
-        ]),
+        ...mapActions(
+            "people", ["setPeople", "setPeopleLocal", "updateFilterEyeColor", "updateFilterGender"]
+        ),
         fetchData() {
-            this.result = this.$resource(
-                "files/people.json",
-                {},
-                {},
-                {
-                    before: () => {
-                        this.loading = true;
-                    },
-                    after: () => {
-                        this.loading = false;
-                    }
-                }
-            );
-            this.result.query().then(
+            this.$http.get("files/people.json").then(
                 response => {
-                    this.people = response.data;
+                    this.setPeople(response.body)
                     this.fillCharts();
                 },
                 response => {
-                    console.log("error !", response);
+                    console.log("error", response);
                 }
             );
         },
         fillCharts() {
-            this.newPeople = this.toFilter(this.people);
+            this.setPeopleLocal(this.toFilter(this.people));
             this.fillChartEyeColor();
             this.fillChartGender();
             this.fillChartPreferencesFruit();
@@ -232,7 +208,7 @@ export default {
         },
         countEyeColorData() {
             this.eyeColorData = [0, 0, 0];
-            for (const person of this.newPeople) {
+            for (const person of this.peopleLocal) {
                 for (
                     let index = 0;
                     index < this.eyeColorLabels.length;
@@ -249,7 +225,7 @@ export default {
         },
         countGenderData() {
             this.genderData = [0, 0];
-            for (const person of this.newPeople) {
+            for (const person of this.peopleLocal) {
                 for (let index = 0; index < this.genderLabels.length; index++) {
                     if (
                         this.genderLabels[index] &&
@@ -262,7 +238,7 @@ export default {
         },
         countPreferencesFruitData() {
             this.preferencesFruitData = [0, 0, 0, 0];
-            for (const person of this.newPeople) {
+            for (const person of this.peopleLocal) {
                 for (
                     let index = 0;
                     index < this.preferencesFruitLabels.length;
@@ -280,7 +256,7 @@ export default {
         },
         countPreferencesPetData() {
             this.preferencesPetData = [0, 0, 0, 0];
-            for (const person of this.newPeople) {
+            for (const person of this.peopleLocal) {
                 for (
                     let index = 0;
                     index < this.preferencesPetLabels.length;
@@ -300,33 +276,17 @@ export default {
             let result = [];
             for (const p of list) {
                 if (
-                    !this.filter.gender.includes(p.gender) &&
-                    !this.filter.eyeColor.includes(p.eyeColor) &&
-                    !this.filter.preferencesFruit.includes(
+                    !this.filterGender.includes(p.gender) &&
+                    !this.filterEyeColor.includes(p.eyeColor) &&
+                    !this.filterPreferencesFruit.includes(
                         p.preferences.fruit
                     ) &&
-                    !this.filter.preferencesPet.includes(p.preferences.pet)
+                    !this.filterPreferencesPet.includes(p.preferences.pet)
                 ) {
                     result.push(p);
                 }
             }
             return result;
-        },
-        updateFilter(property, value) {
-            if (!this.filter[property].includes(value)) {
-                this.filter[property].push(value);
-            } else {
-                for (
-                    let index = 0;
-                    index < this.filter[property].length;
-                    index++
-                ) {
-                    if (this.filter[property][index] === value) {
-                        this.filter[property].splice(index, 1);
-                    }
-                }
-            }
-            this.fetchData();
         }
     }
 };
