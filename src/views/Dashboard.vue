@@ -89,6 +89,7 @@ export default {
                 preferencesPet: [],
                 preferencesFruit: []
             },
+            newPeople: [],
             people: []
         };
     },
@@ -116,7 +117,7 @@ export default {
             );
             this.result.query().then(
                 response => {
-                    this.people = this.toFilter(response.data);
+                    this.people = response.data;
                     this.fillCharts();
                 },
                 response => {
@@ -125,6 +126,7 @@ export default {
             );
         },
         fillCharts() {
+            this.newPeople = this.toFilter(this.people);
             this.fillChartEyeColor();
             this.fillChartGender();
             this.fillChartPreferencesFruit();
@@ -219,7 +221,7 @@ export default {
         },
         countEyeColorData() {
             this.eyeColorData = [0, 0, 0];
-            for (const person of this.people) {
+            for (const person of this.newPeople) {
                 for (
                     let index = 0;
                     index < this.eyeColorLabels.length;
@@ -236,7 +238,7 @@ export default {
         },
         countGenderData() {
             this.genderData = [0, 0];
-            for (const person of this.people) {
+            for (const person of this.newPeople) {
                 for (let index = 0; index < this.genderLabels.length; index++) {
                     if (
                         this.genderLabels[index] &&
@@ -249,7 +251,7 @@ export default {
         },
         countPreferencesFruitData() {
             this.preferencesFruitData = [0, 0, 0, 0];
-            for (const person of this.people) {
+            for (const person of this.newPeople) {
                 for (
                     let index = 0;
                     index < this.preferencesFruitLabels.length;
@@ -267,7 +269,7 @@ export default {
         },
         countPreferencesPetData() {
             this.preferencesPetData = [0, 0, 0, 0];
-            for (const person of this.people) {
+            for (const person of this.newPeople) {
                 for (
                     let index = 0;
                     index < this.preferencesPetLabels.length;
