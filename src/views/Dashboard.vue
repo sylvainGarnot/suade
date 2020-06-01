@@ -10,7 +10,7 @@
 
         <v-row no-gutters>
             <v-col cols="12" sm="4">
-                <chart-container :chart-data="genderChartData" :pie-mode="true" :title="'Genre'" />
+                <chart-container :chart-data="genderChartData" :pie-mode="true" :title="'Genre' + filterGender" />
 
                 <chart-container
                     :chart-data="eyeColorChartData"
@@ -43,9 +43,20 @@
 <script>
 import ChartContainer from "../components/ChartContainer.vue";
 import AverageAges from "../components/AverageAges.vue";
+import { mapState, mapActions } from 'vuex'
 
 export default {
     name: "Dashboard",
+    components: {
+        ChartContainer,
+        AverageAges
+    },
+    computed: {
+        ...mapState({
+            filterGender: state => state.filter.gender,
+            filterEyeColor: state => state.filter.eyeColor,
+        })
+    },
     data() {
         return {
             // Base color
@@ -93,14 +104,14 @@ export default {
             people: []
         };
     },
-    components: {
-        ChartContainer,
-        AverageAges
-    },
     mounted() {
         this.fetchData();
+        this.setGender('test')
     },
     methods: {
+        ...mapActions('filter', [
+            'setGender'
+        ]),
         fetchData() {
             this.result = this.$resource(
                 "files/people.json",

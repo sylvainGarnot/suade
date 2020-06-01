@@ -1,6 +1,7 @@
 <template>
     <div class="data-bloc">
-        <h1>{{ title }} - {{ filterGender }} -</h1>
+        <!-- <h1>{{ title }} - {{ filterGender }} -</h1> -->
+        <h1>{{ title }} -</h1>
         <chart-pie v-if="localPieMode" :chart-data="chartData" :options="optionsPie" />
         <chart-bar v-else :chart-data="chartData" :options="optionsBar" />
         <button @click="localPieMode = !localPieMode">{{ localPieMode ? 'Chart Bar' : 'Chart Pie'}}</button>
@@ -10,7 +11,6 @@
 <script>
 import ChartPie from "../components/ChartPie.vue";
 import ChartBar from "../components/ChartBar.vue";
-import { mapState, mapActions } from 'vuex'
 
 export default {
     name: "ChartContainer",
@@ -56,19 +56,7 @@ export default {
         ChartPie,
         ChartBar
     },
-    computed: {
-        ...mapState({
-            filterGender: state => state.filter.gender,
-            filterEyeColor: state => state.filter.eyeColor,
-        })
-    },
-    mounted() {
-        this.setGender('test')
-    },
     methods: {
-        ...mapActions('filter', [
-            'setGender'
-        ]),
         legendOnClick(e, legendItem) {
             console.log("legend item", legendItem);
             console.log(this.chartData.labels[legendItem.index]);

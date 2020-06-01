@@ -1,6 +1,9 @@
+// init state
 const state = () => ({
-    gender: "male",
-    eyeColor: "blue"
+    eyeColor: [],
+    gender: [],
+    preferencesPet: [],
+    preferencesFruit: []
 })
 
 // getters
