@@ -9,11 +9,12 @@
   },
   "dependencies": {
     "chart.js": "^2.9.3",
+    "chartjs-chart-geo": "^2.1.0",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
     "vue-resource": "^1.5.1",
-    "vue-router": "^3.3.1",
+    "vue-router": "^3.3.2",
     "vuetify": "^2.2.11",
     "vuex": "^4.0.0-beta.2"
   },

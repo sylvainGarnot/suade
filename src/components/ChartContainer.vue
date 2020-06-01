@@ -1,18 +1,18 @@
 <template>
-    <div class="app">
+    <div class="data-bloc">
         <h1>{{title}}</h1>
-        <pie-chart v-if="localPieMode" :chart-data="chartData" :options="optionsPie" />
-        <bar-chart v-else :chart-data="chartData" :options="optionsBar" />
+        <chart-pie v-if="localPieMode" :chart-data="chartData" :options="optionsPie" />
+        <chart-bar v-else :chart-data="chartData" :options="optionsBar" />
         <button @click="localPieMode = !localPieMode">{{ localPieMode ? 'Chart Bar' : 'Chart Pie'}}</button>
     </div>
 </template>
 
 <script>
-import PieChart from "../components/PieChart.vue";
-import BarChart from "../components/BarChart.vue";
+import ChartPie from "../components/ChartPie.vue";
+import ChartBar from "../components/ChartBar.vue";
 
 export default {
-    name: "GlobalChart",
+    name: "ChartContainer",
     data() {
         return {
             optionsPie: {
@@ -52,17 +52,8 @@ export default {
         }
     },
     components: {
-        PieChart,
-        BarChart
+        ChartPie,
+        ChartBar
     }
 };
 </script>
-
-<style lang="scss" scoped>
-.app {
-    padding: 15px;
-    margin: 15px;
-    border-radius: 5px;
-    background: #394264;
-}
-</style>

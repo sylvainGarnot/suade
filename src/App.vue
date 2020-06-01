@@ -30,4 +30,11 @@ export default {
 body {
     background-color: #1f253d
 }
+
+.data-bloc {
+    padding: 15px;
+    margin: 15px;
+    border-radius: 5px;
+    background: #394264;
+}
 </style>

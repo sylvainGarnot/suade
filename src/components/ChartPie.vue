@@ -4,7 +4,7 @@ const { reactiveProp } = mixins;
 
 export default {
     extends: Pie,
-    name: "PieChart",
+    name: "ChartPie",
     mixins: [reactiveProp],
     props: {
         chartData: {

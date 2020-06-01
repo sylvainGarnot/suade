@@ -1,5 +1,5 @@
 <template>
-    <div class="app">
+    <div>
         <!-- test 1 -->
         <input v-model="genderData[0]" @keyup.enter="fillChart()" />
         <button @click="fillChart()">Update Male number</button>
@@ -10,9 +10,9 @@
 
         <v-row no-gutters>
             <v-col cols="12" sm="4">
-                <global-chart :chart-data="genderChartData" :pie-mode="true" :title="'Genre'" />
+                <chart-container :chart-data="genderChartData" :pie-mode="true" :title="'Genre'" />
 
-                <global-chart
+                <chart-container
                     :chart-data="eyeColorChartData"
                     :pie-mode="false"
                     :title="'Couleur des yeux'"
@@ -20,24 +20,29 @@
             </v-col>
 
             <v-col cols="12" sm="4">
-                <global-chart
+                <chart-container
                     :chart-data="preferencesPetChartData"
                     :pie-mode="false"
                     :title="'Animal de compagnie préféré'"
                 />
-                
-                <global-chart
+
+                <chart-container
                     :chart-data="preferencesFruitChartData"
                     :pie-mode="true"
                     :title="'Fruit préféré'"
                 />
+            </v-col>
+
+            <v-col cols="12" sm="4">
+                <average-ages :title="'Âge moyen'" />
             </v-col>
         </v-row>
     </div>
 </template>
 
 <script>
-import GlobalChart from "../components/GlobalChart.vue";
+import ChartContainer from "../components/ChartContainer.vue";
+import AverageAges from "../components/AverageAges.vue";
 
 export default {
     name: "Dashboard",
@@ -88,7 +93,8 @@ export default {
         };
     },
     components: {
-        GlobalChart
+        ChartContainer,
+        AverageAges
     },
     mounted() {
         this.fetchData();
@@ -153,7 +159,10 @@ export default {
                 datasets: [
                     {
                         data: this.genderData,
-                        backgroundColor: [this.colorDarkBlue, this.colorDarkRed],
+                        backgroundColor: [
+                            this.colorDarkBlue,
+                            this.colorDarkRed
+                        ],
                         borderColor: [this.colorBlue, this.colorRed],
                         borderWidth: 2
                     }
