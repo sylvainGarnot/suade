@@ -21,11 +21,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped>
-canvas {
-    padding: 15px;
-    border-radius: 5px;
-    background: #111;
-}
-</style>

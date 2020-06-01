@@ -34,7 +34,7 @@ export default {
                     yAxes: [{ ticks: { beginAtZero: true } }]
                 }
             },
-            localPieMode: this.pieMode
+            localPieMode: this.pieMode,
         };
     },
     props: {
@@ -61,7 +61,8 @@ export default {
 <style lang="scss" scoped>
 .app {
     padding: 15px;
+    margin: 15px;
     border-radius: 5px;
-    background: #111;
+    background: #394264;
 }
 </style>

@@ -8,14 +8,31 @@
         <button @click="updateFilter('gender', 'male')">male</button>
         <button @click="updateFilter('preferencesFruit', 'apple')">female</button>
 
-        <global-chart :chart-data="genderChartData" :pie-mode="false" :title="'Genre'" />
+        <v-row no-gutters>
+            <v-col cols="12" sm="4">
+                <global-chart :chart-data="genderChartData" :pie-mode="true" :title="'Genre'" />
 
-        <global-chart :chart-data="eyeColorChartData" :pie-mode="true" :title="'Couleur des yeux'" />
+                <global-chart
+                    :chart-data="eyeColorChartData"
+                    :pie-mode="false"
+                    :title="'Couleur des yeux'"
+                />
+            </v-col>
 
-        <global-chart :chart-data="preferencesPetChartData" :pie-mode="false" :title="'Animal de compagnie préféré'" />
-
-        <global-chart :chart-data="preferencesFruitChartData" :pie-mode="true" :title="'Fruit préféré'" />
-
+            <v-col cols="12" sm="4">
+                <global-chart
+                    :chart-data="preferencesPetChartData"
+                    :pie-mode="false"
+                    :title="'Animal de compagnie préféré'"
+                />
+                
+                <global-chart
+                    :chart-data="preferencesFruitChartData"
+                    :pie-mode="true"
+                    :title="'Fruit préféré'"
+                />
+            </v-col>
+        </v-row>
     </div>
 </template>
 
@@ -28,11 +45,16 @@ export default {
         return {
             // Base color
             backgroundColor: "black",
-            colorRed: "rgba(255, 99, 132, 0.2)",
-            colorBlue: "rgba(54, 162, 235, 0.2)",
-            colorGreen: "rgba(75, 192, 192, 0.2)",
-            colorOrange: "rgba(255, 159, 64, 0.2)",
-            colorPurple: "rgba(153, 102, 255, 0.2)",
+            colorRed: "rgba(255, 99, 132, 0.99)",
+            colorBlue: "rgba(54, 162, 235, 0.99)",
+            colorGreen: "rgba(75, 192, 192, 0.99)",
+            colorOrange: "rgba(255, 159, 64, 0.99)",
+            colorPurple: "rgba(153, 102, 255, 0.99)",
+            colorDarkRed: "rgba(255, 99, 132, 0.55)",
+            colorDarkBlue: "rgba(54, 162, 235, 0.55)",
+            colorDarkGreen: "rgba(75, 192, 192, 0.55)",
+            colorDarkOrange: "rgba(255, 159, 64, 0.55)",
+            colorDarkPurple: "rgba(153, 102, 255, 0.55)",
 
             // EyeColor
             eyeColorLabels: ["brown", "blue", "green"],
@@ -110,11 +132,16 @@ export default {
                     {
                         data: this.eyeColorData,
                         backgroundColor: [
+                            this.colorDarkOrange,
+                            this.colorDarkBlue,
+                            this.colorDarkGreen
+                        ],
+                        borderColor: [
                             this.colorOrange,
                             this.colorBlue,
                             this.colorGreen
                         ],
-                        borderColor: this.backgroundColor
+                        borderWidth: 2
                     }
                 ]
             };
@@ -126,8 +153,9 @@ export default {
                 datasets: [
                     {
                         data: this.genderData,
-                        backgroundColor: [this.colorBlue, this.colorRed],
-                        borderColor: this.backgroundColor
+                        backgroundColor: [this.colorDarkBlue, this.colorDarkRed],
+                        borderColor: [this.colorBlue, this.colorRed],
+                        borderWidth: 2
                     }
                 ]
             };
@@ -140,12 +168,18 @@ export default {
                     {
                         data: this.preferencesFruitData,
                         backgroundColor: [
+                            this.colorDarkGreen,
+                            this.colorDarkOrange,
+                            this.colorDarkRed,
+                            this.colorDarkBlue
+                        ],
+                        borderColor: [
                             this.colorGreen,
                             this.colorOrange,
                             this.colorRed,
                             this.colorBlue
                         ],
-                        borderColor: this.backgroundColor
+                        borderWidth: 2
                     }
                 ]
             };
@@ -158,12 +192,18 @@ export default {
                     {
                         data: this.preferencesPetData,
                         backgroundColor: [
+                            this.colorDarkBlue,
+                            this.colorDarkGreen,
+                            this.colorDarkOrange,
+                            this.colorDarkPurple
+                        ],
+                        borderColor: [
                             this.colorBlue,
                             this.colorGreen,
                             this.colorOrange,
                             this.colorPurple
                         ],
-                        borderColor: this.backgroundColor
+                        borderWidth: 2
                     }
                 ]
             };
@@ -171,7 +211,11 @@ export default {
         countEyeColorData() {
             this.eyeColorData = [0, 0, 0];
             for (const person of this.people) {
-                for (let index = 0; index < this.eyeColorLabels.length; index++) {
+                for (
+                    let index = 0;
+                    index < this.eyeColorLabels.length;
+                    index++
+                ) {
                     if (
                         this.eyeColorLabels[index] &&
                         person.eyeColor === this.eyeColorLabels[index]
