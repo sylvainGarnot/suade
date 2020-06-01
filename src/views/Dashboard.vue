@@ -34,7 +34,7 @@
             </v-col>
 
             <v-col cols="12" sm="4">
-                <average-ages :title="'Âge moyen'" />
+                <average-ages :people="people" :title="'Âge moyen'" />
             </v-col>
         </v-row>
     </div>
