@@ -15,13 +15,32 @@ const getters = {}
 const actions = {
     setPeople({
         commit
-    }, all) {
-        commit('setPeople', { all: all } )
+    }, value) {
+        commit('setPeople', { value: value } )
     },
     setPeopleLocal({
         commit
-    }, local) {
-        commit('setPeopleLocal', { local: local } )
+    }, value) {
+        commit('setPeopleLocal', { value: value } )
+    },
+    updatePeopleLocal({
+        commit,
+        state
+    }) {
+        let result = [];
+        for (const p of state.all) {
+            if (
+                !state.filterEyeColor.includes(p.eyeColor) &&
+                !state.filterGender.includes(p.gender) &&
+                !state.filterPreferencesFruit.includes(
+                    p.preferences.fruit
+                ) &&
+                !state.filterPreferencesPet.includes(p.preferences.pet)
+            ) {
+                result.push(p);
+            }
+        }
+        commit('setPeopleLocal', { value: result } )
     },
     updateFilterEyeColor({
         commit,
@@ -99,11 +118,11 @@ const actions = {
 
 // mutations
 const mutations = {
-    setPeople(state, { all } ) {
-        state.all = all
+    setPeople(state, { value } ) {
+        state.all = value
     },
-    setPeopleLocal(state, { local } ) {
-        state.local = local
+    setPeopleLocal(state, { value } ) {
+        state.local = value
     },
     addToFilterEyeColor(state, { value } ) {
         state.filterEyeColor.push(value)

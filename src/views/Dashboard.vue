@@ -6,10 +6,10 @@
 
         <v-row no-gutters>
             <v-col cols="12" sm="4">
-                <chart-container :chart-data="genderChartData" :pie-mode="true" :title="'Genre'" />
+                <chart-container :chart-data="chartData.gender" :pie-mode="true" :title="'Genre'" />
 
                 <chart-container
-                    :chart-data="eyeColorChartData"
+                    :chart-data="chartData.eyeColor"
                     :pie-mode="false"
                     :title="'Couleur des yeux'"
                 />
@@ -17,13 +17,13 @@
 
             <v-col cols="12" sm="4">
                 <chart-container
-                    :chart-data="preferencesPetChartData"
+                    :chart-data="chartData.preferences.pet"
                     :pie-mode="false"
                     :title="'Animal de compagnie préféré'"
                 />
 
                 <chart-container
-                    :chart-data="preferencesFruitChartData"
+                    :chart-data="chartData.preferences.fruit"
                     :pie-mode="true"
                     :title="'Fruit préféré'"
                 />
@@ -53,8 +53,9 @@ export default {
             peopleLocal: state => state.people.local,
             filterEyeColor: state => state.people.filterEyeColor,
             filterGender: state => state.people.filterGender,
-            filterPreferencesFruit: state => state.people.filterPreferencesFruit,
-            filterPreferencesPet: state => state.people.filterPreferencesPet,
+            filterPreferencesFruit: state =>
+                state.people.filterPreferencesFruit,
+            filterPreferencesPet: state => state.people.filterPreferencesPet
         })
     },
     data() {
@@ -72,39 +73,128 @@ export default {
             colorDarkOrange: "rgba(255, 159, 64, 0.55)",
             colorDarkPurple: "rgba(153, 102, 255, 0.55)",
 
-            // EyeColor
-            eyeColorLabels: ["brown", "blue", "green"],
-            eyeColorData: [0, 0, 0],
-            eyeColorChartData: null,
+            color: {
+                red: {
+                    dark: "rgba(255, 99, 132, 0.55)",
+                    light: "rgba(255, 99, 132, 0.99)"
+                },
+                blue: {
+                    dark: "rgba(54, 162, 235, 0.55)",
+                    light: "rgba(54, 162, 235, 0.99)"
+                },
+                green: {
+                    dark: "rgba(75, 192, 192, 0.55)",
+                    light: "rgba(75, 192, 192, 0.99)"
+                },
+                orange: {
+                    dark: "rgba(255, 159, 64, 0.55)",
+                    light: "rgba(255, 159, 64, 0.99)"
+                },
+                purple: {
+                    dark: "rgba(153, 102, 255, 0.55)",
+                    light: "rgba(153, 102, 255, 0.99)"
+                }
+            },
+            chartBackground: {
+                eyeColor: null,
+                gender: null,
+                preferences: {
+                    fruit: null,
+                    pet: null
+                }
+            },
+            chartBorderColor: {
+                eyeColor: null,
+                gender: null,
+                preferences: {
+                    fruit: null,
+                    pet: null
+                }
+            },
+            chartData: {
+                eyeColor: null,
+                gender: null,
+                preferences: {
+                    fruit: null,
+                    pet: null
+                }
+            },
+            chartDataCount: {
+                eyeColor: [0, 0, 0],
+                gender: [0, 0],
+                preferences: {
+                    fruit: [0, 0, 0, 0],
+                    pet: [0, 0, 0, 0]
+                }
+            },
+            chartLabels: {
+                eyeColor: ["brown", "blue", "green"],
+                gender: ["male", "female"],
+                preferences: {
+                    fruit: ["apple", "mango", "strawberry", "banana"],
+                    pet: ["cat", "dog", "bird", "none"]
+                }
+            },
 
-            // Gender
-            genderLabels: ["male", "female"],
-            genderData: [0, 0],
-            genderChartData: null,
-
-            // Preferences Fruit
-            preferencesFruitLabels: ["apple", "mango", "strawberry", "banana"],
-            preferencesFruitData: [0, 0, 0, 0],
-            preferencesFruitChartData: null,
-
-            // Preference Pet
-            preferencesPetLabels: ["cat", "dog", "bird", "none"],
-            preferencesPetData: [0, 0, 0, 0],
-            preferencesPetChartData: null,
             loading: true
         };
     },
     mounted() {
         this.fetchData();
+        this.chartBackground.eyeColor = [
+            this.color.orange.dark,
+            this.color.blue.dark,
+            this.color.green.dark
+        ];
+        this.chartBorderColor.eyeColor = [
+            this.color.orange.light,
+            this.color.blue.light,
+            this.color.green.light
+        ];
+        this.chartBackground.gender = [
+            this.color.blue.dark,
+            this.color.red.dark
+        ];
+        this.chartBorderColor.gender = [
+            this.color.blue.light,
+            this.color.red.light
+        ];
+        this.chartBackground.preferences.fruit = [
+            this.color.blue.dark,
+            this.color.orange.dark,
+            this.color.red.dark,
+            this.color.purple.dark,
+        ];
+        this.chartBorderColor.preferences.fruit = [
+            this.color.blue.light,
+            this.color.orange.light,
+            this.color.red.light,
+            this.color.purple.light,
+        ];
+        this.chartBackground.preferences.pet = [
+            this.color.red.dark,
+            this.color.green.dark,
+            this.color.purple.dark,
+            this.color.orange.dark,
+        ];
+        this.chartBorderColor.preferences.pet = [
+            this.color.red.light,
+            this.color.green.light,
+            this.color.purple.light,
+            this.color.orange.light,
+        ];
     },
     methods: {
-        ...mapActions(
-            "people", ["setPeople", "setPeopleLocal", "updateFilterEyeColor", "updateFilterGender"]
-        ),
+        ...mapActions("people", [
+            "setPeople",
+            "updatePeopleLocal",
+            "updateFilterEyeColor",
+            "updateFilterGender"
+        ]),
         fetchData() {
             this.$http.get("files/people.json").then(
                 response => {
-                    this.setPeople(response.body)
+                    this.setPeople(response.body);
                     this.fillCharts();
                 },
                 response => {
@@ -113,181 +203,87 @@ export default {
             );
         },
         fillCharts() {
-            this.setPeopleLocal(this.toFilter(this.people));
-            this.fillChartEyeColor();
-            this.fillChartGender();
-            this.fillChartPreferencesFruit();
-            this.fillChartPreferencesPet();
+            this.updatePeopleLocal()
+            this.fillChart("eyeColor")
+            this.fillChart("gender")
+            this.fillChartPreferences("fruit")
+            this.fillChartPreferences("pet")
         },
-        fillChartEyeColor() {
-            this.countEyeColorData();
-            this.eyeColorChartData = {
-                labels: this.eyeColorLabels,
+        fillChart(property) {
+            this.countData(property);
+            this.chartData[property] = {
+                labels: this.chartLabels[property],
                 datasets: [
                     {
-                        data: this.eyeColorData,
-                        backgroundColor: [
-                            this.colorDarkOrange,
-                            this.colorDarkBlue,
-                            this.colorDarkGreen
-                        ],
-                        borderColor: [
-                            this.colorOrange,
-                            this.colorBlue,
-                            this.colorGreen
-                        ],
+                        data: this.chartDataCount[property],
+                        backgroundColor: this.chartBackground[property],
+                        borderColor: this.chartBorderColor[property],
                         borderWidth: 2
                     }
                 ]
             };
         },
-        fillChartGender() {
-            this.countGenderData();
-            this.genderChartData = {
-                labels: this.genderLabels,
+        fillChartPreferences(property) {
+            this.countDataPreferences(property);
+            this.chartData.preferences[property] = {
+                labels: this.chartLabels.preferences[property],
                 datasets: [
                     {
-                        data: this.genderData,
-                        backgroundColor: [
-                            this.colorDarkBlue,
-                            this.colorDarkRed
-                        ],
-                        borderColor: [this.colorBlue, this.colorRed],
+                        data: this.chartDataCount.preferences[property],
+                        backgroundColor: this.chartBackground.preferences[property],
+                        borderColor: this.chartBorderColor.preferences[property],
                         borderWidth: 2
                     }
                 ]
             };
         },
-        fillChartPreferencesFruit() {
-            this.countPreferencesFruitData();
-            this.preferencesFruitChartData = {
-                labels: this.preferencesFruitLabels,
-                datasets: [
-                    {
-                        data: this.preferencesFruitData,
-                        backgroundColor: [
-                            this.colorDarkGreen,
-                            this.colorDarkOrange,
-                            this.colorDarkRed,
-                            this.colorDarkBlue
-                        ],
-                        borderColor: [
-                            this.colorGreen,
-                            this.colorOrange,
-                            this.colorRed,
-                            this.colorBlue
-                        ],
-                        borderWidth: 2
-                    }
-                ]
-            };
-        },
-        fillChartPreferencesPet() {
-            this.countPreferencesPetData();
-            this.preferencesPetChartData = {
-                labels: this.preferencesPetLabels,
-                datasets: [
-                    {
-                        data: this.preferencesPetData,
-                        backgroundColor: [
-                            this.colorDarkBlue,
-                            this.colorDarkGreen,
-                            this.colorDarkOrange,
-                            this.colorDarkPurple
-                        ],
-                        borderColor: [
-                            this.colorBlue,
-                            this.colorGreen,
-                            this.colorOrange,
-                            this.colorPurple
-                        ],
-                        borderWidth: 2
-                    }
-                ]
-            };
-        },
-        countEyeColorData() {
-            this.eyeColorData = [0, 0, 0];
+        countData(property) {
+            for (
+                let index = 0;
+                index < this.chartDataCount[property].length;
+                index++
+            ) {
+                this.chartDataCount[property][index] = 0;
+            }
             for (const person of this.peopleLocal) {
                 for (
                     let index = 0;
-                    index < this.eyeColorLabels.length;
+                    index < this.chartLabels[property].length;
                     index++
                 ) {
                     if (
-                        this.eyeColorLabels[index] &&
-                        person.eyeColor === this.eyeColorLabels[index]
+                        this.chartLabels[property][index] &&
+                        person[property] === this.chartLabels[property][index]
                     ) {
-                        this.eyeColorData[index]++;
+                        this.chartDataCount[property][index]++;
                     }
                 }
             }
         },
-        countGenderData() {
-            this.genderData = [0, 0];
-            for (const person of this.peopleLocal) {
-                for (let index = 0; index < this.genderLabels.length; index++) {
-                    if (
-                        this.genderLabels[index] &&
-                        person.gender === this.genderLabels[index]
-                    ) {
-                        this.genderData[index]++;
-                    }
-                }
+        countDataPreferences(property) {
+            for (
+                let index = 0;
+                index < this.chartDataCount.preferences[property].length;
+                index++
+            ) {
+                this.chartDataCount.preferences[property][index] = 0;
             }
-        },
-        countPreferencesFruitData() {
-            this.preferencesFruitData = [0, 0, 0, 0];
             for (const person of this.peopleLocal) {
                 for (
                     let index = 0;
-                    index < this.preferencesFruitLabels.length;
+                    index < this.chartLabels.preferences[property].length;
                     index++
                 ) {
                     if (
-                        this.preferencesFruitLabels[index] &&
-                        person.preferences.fruit ===
-                            this.preferencesFruitLabels[index]
+                        this.chartLabels.preferences[property][index] &&
+                        person.preferences[property] ===
+                            this.chartLabels.preferences[property][index]
                     ) {
-                        this.preferencesFruitData[index]++;
+                        this.chartDataCount.preferences[property][index]++;
                     }
                 }
             }
         },
-        countPreferencesPetData() {
-            this.preferencesPetData = [0, 0, 0, 0];
-            for (const person of this.peopleLocal) {
-                for (
-                    let index = 0;
-                    index < this.preferencesPetLabels.length;
-                    index++
-                ) {
-                    if (
-                        this.preferencesPetLabels[index] &&
-                        person.preferences.pet ===
-                            this.preferencesPetLabels[index]
-                    ) {
-                        this.preferencesPetData[index]++;
-                    }
-                }
-            }
-        },
-        toFilter(list) {
-            let result = [];
-            for (const p of list) {
-                if (
-                    !this.filterGender.includes(p.gender) &&
-                    !this.filterEyeColor.includes(p.eyeColor) &&
-                    !this.filterPreferencesFruit.includes(
-                        p.preferences.fruit
-                    ) &&
-                    !this.filterPreferencesPet.includes(p.preferences.pet)
-                ) {
-                    result.push(p);
-                }
-            }
-            return result;
-        }
     }
 };
 </script>
