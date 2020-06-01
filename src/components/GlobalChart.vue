@@ -1,8 +1,9 @@
 <template>
     <div class="app">
         <h1>{{title}}</h1>
-        <pie-chart v-if="pieMode" :chart-data="chartData" :options="optionsPie" />
+        <pie-chart v-if="localPieMode" :chart-data="chartData" :options="optionsPie" />
         <bar-chart v-else :chart-data="chartData" :options="optionsBar" />
+        <button @click="localPieMode = !localPieMode">{{ localPieMode ? 'Chart Bar' : 'Chart Pie'}}</button>
     </div>
 </template>
 
@@ -21,7 +22,7 @@ export default {
                     labels: { padding: 20 }
                 },
                 maintainAspectRatio: false,
-                responsive: false
+                responsive: true
             },
             optionsBar: {
                 legend: {
@@ -32,7 +33,8 @@ export default {
                 scales: {
                     yAxes: [{ ticks: { beginAtZero: true } }]
                 }
-            }
+            },
+            localPieMode: this.pieMode
         };
     },
     props: {
@@ -57,7 +59,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-canvas {
+.app {
     padding: 15px;
     border-radius: 5px;
     background: #111;

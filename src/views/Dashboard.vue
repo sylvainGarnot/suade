@@ -8,25 +8,14 @@
         <button @click="updateFilter('gender', 'male')">male</button>
         <button @click="updateFilter('preferencesFruit', 'apple')">female</button>
 
-        <global-chart :chart-data="genderChartData" :pie-mode="genderChartPie" :title="'Genre'" />
-        <button
-            @click="genderChartPie = !genderChartPie"
-        >{{ genderChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
+        <global-chart :chart-data="genderChartData" :pie-mode="false" :title="'Genre'" />
 
-        <global-chart :chart-data="eyeColorChartData" :pie-mode="eyeColorChartPie" :title="'Couleur des yeux'" />
-        <button
-            @click="eyeColorChartPie = !eyeColorChartPie"
-        >{{ eyeColorChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
+        <global-chart :chart-data="eyeColorChartData" :pie-mode="true" :title="'Couleur des yeux'" />
 
-        <global-chart :chart-data="preferencesPetChartData" :pie-mode="preferencesPetChartPie" :title="'Animal de compagnie préféré'" />
-        <button
-            @click="preferencesPetChartPie = !preferencesPetChartPie"
-        >{{ preferencesPetChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
+        <global-chart :chart-data="preferencesPetChartData" :pie-mode="false" :title="'Animal de compagnie préféré'" />
 
-        <global-chart :chart-data="preferencesFruitChartData" :pie-mode="preferencesFruitChartPie" :title="'Fruit préféré'" />
-        <button
-            @click="preferencesFruitChartPie = !preferencesFruitChartPie"
-        >{{ preferencesFruitChartPie ? 'Chart Bar' : 'Chart Pie'}}</button>
+        <global-chart :chart-data="preferencesFruitChartData" :pie-mode="true" :title="'Fruit préféré'" />
+
     </div>
 </template>
 
@@ -46,25 +35,21 @@ export default {
             colorPurple: "rgba(153, 102, 255, 0.2)",
 
             // EyeColor
-            eyeColorChartPie: true,
             eyeColorLabels: ["brown", "blue", "green"],
             eyeColorData: [0, 0, 0],
             eyeColorChartData: null,
 
             // Gender
-            genderChartPie: true,
             genderLabels: ["male", "female"],
             genderData: [0, 0],
             genderChartData: null,
 
             // Preferences Fruit
-            preferencesPetChartPie: true,
             preferencesFruitLabels: ["apple", "mango", "strawberry", "banana"],
             preferencesFruitData: [0, 0, 0, 0],
             preferencesFruitChartData: null,
 
             // Preference Pet
-            preferencesFruitChartPie: true,
             preferencesPetLabels: ["cat", "dog", "bird", "none"],
             preferencesPetData: [0, 0, 0, 0],
             preferencesPetChartData: null,
@@ -76,27 +61,6 @@ export default {
                 gender: [],
                 preferencesPet: [],
                 preferencesFruit: []
-            },
-
-            // Options to delete
-            optionsPieChart: {
-                legend: {
-                    display: true,
-                    onClick: null,
-                    labels: { padding: 20 }
-                },
-                maintainAspectRatio: false,
-                responsive: false
-            },
-            optionsBarChart: {
-                legend: {
-                    display: false
-                },
-                maintainAspectRatio: false,
-                responsive: true,
-                scales: {
-                    yAxes: [{ ticks: { beginAtZero: true } }]
-                }
             },
             people: []
         };
