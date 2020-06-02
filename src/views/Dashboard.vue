@@ -1,17 +1,17 @@
 <template>
     <div>
         <!-- test 2 -->
-        <button @click="updateFilterGender('male'); fillCharts();">male</button>
-        <button @click="updateFilterEyeColor('blue'); fillCharts();">blue</button>
+        <button @click="updateFilter(['preferencesFruit', 'banana']); fillCharts();">banana</button>
+        <button @click="updateFilter(['eyeColor', 'blue']); fillCharts();">blue</button>
 
         <v-row no-gutters>
             <v-col cols="12" sm="4">
-                <chart-container :chart-data="chartData.gender" :pie-mode="true" :title="'Genre'" />
+                <chart-container :chart-data="chartData.gender" :pie-mode="true" :title="'Gender'" />
 
                 <chart-container
                     :chart-data="chartData.eyeColor"
                     :pie-mode="false"
-                    :title="'Couleur des yeux'"
+                    :title="'Eyes Color'"
                 />
             </v-col>
 
@@ -19,18 +19,19 @@
                 <chart-container
                     :chart-data="chartData.preferences.pet"
                     :pie-mode="false"
-                    :title="'Animal de compagnie préféré'"
+                    :title="'Favorite Pet'"
                 />
 
                 <chart-container
                     :chart-data="chartData.preferences.fruit"
                     :pie-mode="true"
-                    :title="'Fruit préféré'"
+                    :title="'Favorite Fruit'"
                 />
             </v-col>
 
             <v-col cols="12" sm="4">
-                <average-ages :people="peopleLocal" :title="'Âge moyen'" />
+                <filters :title="'Filters'" />
+                <average-ages :people="peopleLocal" :title="'Average Age'" />
             </v-col>
         </v-row>
     </div>
@@ -39,23 +40,20 @@
 <script>
 import ChartContainer from "../components/ChartContainer.vue";
 import AverageAges from "../components/AverageAges.vue";
+import Filters from "../components/Filters.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
     name: "Dashboard",
     components: {
+        AverageAges,
         ChartContainer,
-        AverageAges
+        Filters
     },
     computed: {
         ...mapState({
             people: state => state.people.all,
-            peopleLocal: state => state.people.local,
-            filterEyeColor: state => state.people.filterEyeColor,
-            filterGender: state => state.people.filterGender,
-            filterPreferencesFruit: state =>
-                state.people.filterPreferencesFruit,
-            filterPreferencesPet: state => state.people.filterPreferencesPet
+            peopleLocal: state => state.people.local
         })
     },
     data() {
@@ -135,8 +133,6 @@ export default {
                     pet: ["cat", "dog", "bird", "none"]
                 }
             },
-
-            loading: true
         };
     },
     mounted() {
@@ -188,8 +184,7 @@ export default {
         ...mapActions("people", [
             "setPeople",
             "updatePeopleLocal",
-            "updateFilterEyeColor",
-            "updateFilterGender"
+            "updateFilter"
         ]),
         fetchData() {
             this.$http.get("files/people.json").then(

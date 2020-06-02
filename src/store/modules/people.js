@@ -2,10 +2,12 @@
 const state = () => ({
     all: [],
     local: [],
-    filterEyeColor: [],
-    filterGender: [],
-    filterPreferencesPet: [],
-    filterPreferencesFruit: []
+    filter: {
+        eyeColor: [],
+        gender: [],
+        preferencesPet: [],
+        preferencesFruit: []
+    }
 })
 
 // getters
@@ -30,86 +32,36 @@ const actions = {
         let result = [];
         for (const p of state.all) {
             if (
-                !state.filterEyeColor.includes(p.eyeColor) &&
-                !state.filterGender.includes(p.gender) &&
-                !state.filterPreferencesFruit.includes(
+                !state.filter.eyeColor.includes(p.eyeColor) &&
+                !state.filter.gender.includes(p.gender) &&
+                !state.filter.preferencesFruit.includes(
                     p.preferences.fruit
                 ) &&
-                !state.filterPreferencesPet.includes(p.preferences.pet)
+                !state.filter.preferencesPet.includes(p.preferences.pet)
             ) {
                 result.push(p);
             }
         }
         commit('setPeopleLocal', { value: result } )
     },
-    updateFilterEyeColor({
+    updateFilter({
         commit,
         state
     }, value) {
-        if (!state.filterEyeColor.includes(value)) {
-            commit('addToFilterEyeColor', { value: value } )
+        const property = value[0]
+        const content = value[1]
+        if (!state.filter[property].includes(content)) {
+            commit('addToFilter', { property: property, value: content } )
+            console.log('add')
         } else {
+            console.log('remove')
             for (
                 let index = 0;
-                index < state.filterEyeColor.length;
+                index < state.filter[property].length;
                 index++
             ) {
-                if (state.filterEyeColor[index] === value) {
-                    commit('removeFromFilterEyeColor', { index: index } )
-                }
-            }
-        }
-    },
-    updateFilterGender({
-        commit,
-        state
-    }, value) {
-        if (!state.filterGender.includes(value)) {
-            commit('addToFilterGender', { value: value } )
-        } else {
-            for (
-                let index = 0;
-                index < state.filterGender.length;
-                index++
-            ) {
-                if (state.filterGender[index] === value) {
-                    commit('removeFromFilterGender', { index: index } )
-                }
-            }
-        }
-    },
-    updateFilterPreferencesFruit({
-        commit,
-        state
-    }, value) {
-        if (!state.filterPreferencesFruit.includes(value)) {
-            commit('addToFilterPreferencesFruit', { value: value } )
-        } else {
-            for (
-                let index = 0;
-                index < state.filterPreferencesFruit.length;
-                index++
-            ) {
-                if (state.filterPreferencesFruit[index] === value) {
-                    commit('removeFromFilterPreferencesFruit', { index: index } )
-                }
-            }
-        }
-    },
-    updateFilterPreferencesPet({
-        commit,
-        state
-    }, value) {
-        if (!state.filterPreferencesPet.includes(value)) {
-            commit('addToFilterPreferencesPet', { value: value } )
-        } else {
-            for (
-                let index = 0;
-                index < state.filterPreferencesPet.length;
-                index++
-            ) {
-                if (state.filterPreferencesPet[index] === value) {
-                    commit('removeFromFilterPreferencesPet', { index: index } )
+                if (state.filter[property][index] === content) {
+                    commit('removeFromFilter', { property: property, index: index } )
                 }
             }
         }
@@ -124,29 +76,11 @@ const mutations = {
     setPeopleLocal(state, { value } ) {
         state.local = value
     },
-    addToFilterEyeColor(state, { value } ) {
-        state.filterEyeColor.push(value)
+    addToFilter(state, { property, value } ) {
+        state.filter[property].push(value)
     },
-    addToFilterGender(state, { value } ) {
-        state.filterGender.push(value)
-    },
-    addToFilterPreferencesFruit(state, { value } ) {
-        state.filterPreferencesFruit.push(value)
-    },
-    addToFilterPreferencesPet(state, { value } ) {
-        state.filterPreferencesPet.push(value)
-    },
-    removeFromFilterEyeColor(state, { index } ) {
-        state.filterEyeColor.splice(index, 1)
-    },
-    removeFromFilterGender(state, { index } ) {
-        state.filterGender.splice(index, 1)
-    },
-    removeFromFilterPreferencesFruit(state, { index } ) {
-        state.filterPreferencesFruit.splice(index, 1)
-    },
-    removeFromFilterPreferencesPet(state, { index } ) {
-        state.filterPreferencesPet.splice(index, 1)
+    removeFromFilter(state, { property, index } ) {
+        state.filter[property].splice(index, 1)
     },
 }
 
