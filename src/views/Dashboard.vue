@@ -32,8 +32,9 @@
             </v-col>
 
             <v-col cols="12" sm="4">
-                <filters :title="'Filters'" />
                 <average-ages :people="peopleLocal" :title="'Average Age'" />
+
+                <filters :title="'Filters'" @update="fillCharts()" />
             </v-col>
         </v-row>
     </div>
