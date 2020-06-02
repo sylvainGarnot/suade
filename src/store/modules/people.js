@@ -52,9 +52,7 @@ const actions = {
         const content = value[1]
         if (!state.filter[property].includes(content)) {
             commit('addToFilter', { property: property, value: content } )
-            console.log('add')
         } else {
-            console.log('remove')
             for (
                 let index = 0;
                 index < state.filter[property].length;

@@ -10,6 +10,7 @@
 <script>
 import ChartPie from "../components/ChartPie.vue";
 import ChartBar from "../components/ChartBar.vue";
+import { mapActions } from "vuex";
 
 export default {
     name: "ChartContainer",
@@ -40,6 +41,10 @@ export default {
     props: {
         chartData: {
             type: Object,
+            default: null,
+        },
+        chartDataType: {
+            type: String,
             default: null
         },
         pieMode: {
@@ -56,9 +61,14 @@ export default {
         ChartBar
     },
     methods: {
+        ...mapActions("people", [
+            "updateFilter"
+        ]),
         legendOnClick(e, legendItem) {
-            console.log("legend item", legendItem);
-            console.log(this.chartData.labels[legendItem.index]);
+            if (this.chartDataType) {
+                this.updateFilter([this.chartDataType, legendItem.text])
+                this.$emit('update')
+            }
         }
     }
 };

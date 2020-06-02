@@ -1,31 +1,33 @@
 <template>
     <div>
-        <!-- test 2 -->
-        <button @click="updateFilter(['preferencesFruit', 'banana']); fillCharts();">banana</button>
-        <button @click="updateFilter(['eyeColor', 'blue']); fillCharts();">blue</button>
-
         <v-row no-gutters>
             <v-col cols="12" sm="4">
-                <chart-container :chart-data="chartData.gender" :pie-mode="true" :title="'Gender'" />
+                <chart-container :chart-data="chartData.gender" :chart-data-type="'gender'" :pie-mode="true" :title="'Gender'" @update="fillCharts()" />
 
                 <chart-container
                     :chart-data="chartData.eyeColor"
+                    :chart-data-type="'eyeColor'"
                     :pie-mode="false"
                     :title="'Eyes Color'"
+                    @update="fillCharts()"
                 />
             </v-col>
 
             <v-col cols="12" sm="4">
                 <chart-container
                     :chart-data="chartData.preferences.pet"
+                    :chart-data-type="'preferencesPet'"
                     :pie-mode="false"
                     :title="'Favorite Pet'"
+                    @update="fillCharts()"
                 />
 
                 <chart-container
                     :chart-data="chartData.preferences.fruit"
+                    :chart-data-type="'preferencesFruit'"
                     :pie-mode="true"
                     :title="'Favorite Fruit'"
+                    @update="fillCharts()"
                 />
             </v-col>
 
