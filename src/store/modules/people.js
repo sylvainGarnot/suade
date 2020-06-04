@@ -7,7 +7,8 @@ const state = () => ({
         gender: [],
         preferencesPet: [],
         preferencesFruit: []
-    }
+    },
+    selected: {}
 })
 
 // getters
@@ -18,12 +19,22 @@ const actions = {
     setPeople({
         commit
     }, value) {
-        commit('setPeople', { value: value } )
+        commit('setPeople', {
+            value: value
+        })
     },
-    setPeopleLocal({
-        commit
+    setPeopleSelected({
+        commit,
+        state
     }, value) {
-        commit('setPeopleLocal', { value: value } )
+        commit('setPeopleSelected', {
+            value: value
+        })
+        for (let index = 0; index < state.local.length; index++) {
+            if (state.local[index]._id === value._id) {
+                commit('setPeopleById', { id: index, value: value } )
+            }
+        }
     },
     updatePeopleLocal({
         commit,
@@ -42,7 +53,9 @@ const actions = {
                 result.push(p);
             }
         }
-        commit('setPeopleLocal', { value: result } )
+        commit('setPeopleLocal', {
+            value: result
+        })
     },
     updateFilter({
         commit,
@@ -51,15 +64,19 @@ const actions = {
         const property = value[0]
         const content = value[1]
         if (!state.filter[property].includes(content)) {
-            commit('addToFilter', { property: property, value: content } )
+            commit('addToFilter', {
+                property: property,
+                value: content
+            })
         } else {
             for (
-                let index = 0;
-                index < state.filter[property].length;
-                index++
+                let index = 0; index < state.filter[property].length; index++
             ) {
                 if (state.filter[property][index] === content) {
-                    commit('removeFromFilter', { property: property, index: index } )
+                    commit('removeFromFilter', {
+                        property: property,
+                        index: index
+                    })
                 }
             }
         }
@@ -68,16 +85,37 @@ const actions = {
 
 // mutations
 const mutations = {
-    setPeople(state, { value } ) {
+    setPeople(state, {
+        value
+    }) {
         state.all = value
     },
-    setPeopleLocal(state, { value } ) {
+    setPeopleById(state, {
+        id,
+        value
+    }) {
+        state.all.splice(id, 1, value)
+    },
+    setPeopleLocal(state, {
+        value
+    }) {
         state.local = value
     },
-    addToFilter(state, { property, value } ) {
+    setPeopleSelected(state, {
+        value
+    }) {
+        state.selected = value
+    },
+    addToFilter(state, {
+        property,
+        value
+    }) {
         state.filter[property].push(value)
     },
-    removeFromFilter(state, { property, index } ) {
+    removeFromFilter(state, {
+        property,
+        index
+    }) {
         state.filter[property].splice(index, 1)
     },
 }

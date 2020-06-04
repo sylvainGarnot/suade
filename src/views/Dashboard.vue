@@ -37,8 +37,8 @@
         </v-col>
 
         <v-col cols="12" sm="6">
-            <people-edit />
-            <people-list />
+            <people-edit @update="fillCharts()" />
+            <people-search />
             <average-ages :people="peopleLocal" :title="'Average Age'" />
             <filters :title="'Filters'" @update="fillCharts()" />
         </v-col>
@@ -50,7 +50,7 @@ import ChartContainer from "../components/ChartContainer.vue";
 import AverageAges from "../components/AverageAges.vue";
 import Filters from "../components/Filters.vue";
 import PeopleEdit from "../components/PeopleEdit.vue";
-import PeopleList from "../components/PeopleList.vue";
+import PeopleSearch from "../components/PeopleSearch.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -60,7 +60,7 @@ export default {
         ChartContainer,
         Filters,
         PeopleEdit,
-        PeopleList
+        PeopleSearch
     },
     computed: {
         ...mapState({
@@ -70,7 +70,6 @@ export default {
     },
     data() {
         return {
-            // Base color
             backgroundColor: "black",
             colorRed: "rgba(255, 99, 132, 0.99)",
             colorBlue: "rgba(54, 162, 235, 0.99)",
