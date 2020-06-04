@@ -33,7 +33,7 @@ Scenario 1 – Visualization Dashboard (preferred), The user should be able to:
 - [x] visualise the data as a pie chart.
 - [x] visualise the data as a bar chart.
 - [x] create dynamic interactions between charts.
-- [ ] edit the data with a table or modal.
+- [x] edit the data with a table or modal.
 - [ ] BONUS: add a geographic chart.
 
 Scenario 2 – Data Editor, The user should be able to:
@@ -43,7 +43,7 @@ Scenario 2 – Data Editor, The user should be able to:
 - [ ] BONUS: handle any type of CSV file.
 
 Scenario 3 – Smart Search, The user should be able to:
-- [ ] see a paginated list of people.
-- [ ] do a full text search to dynamically filter the results.
-- [ ] select an item and see the details in the same page.
+- [x] see a paginated list of people.
+- [x] do a full text search to dynamically filter the results.
+- [x] select an item and see the details in the same page.
 - [ ] BONUS: be able to search by a specific field.
