@@ -1,19 +1,19 @@
 <template>
     <div class="data-bloc">
         <h1>{{ title }}</h1>
-
-        <div v-for="filter in filter.gender" :key="filter.id">
-            <span @click="updateFilter(['gender', filter]); $emit('update')">{{ filter }}</span>
-        </div>
-        <div v-for="filter in filter.eyeColor" :key="filter.id">
-            <span @click="updateFilter(['eyeColor', filter]); $emit('update')">{{ filter }}</span>
-        </div>
-        <div v-for="filter in filter.preferencesFruit" :key="filter.id">
-            <span @click="updateFilter(['preferencesFruit', filter]); $emit('update')">{{ filter }}</span>
-        </div>
-        <div v-for="filter in filter.preferencesPet" :key="filter.id">
-            <span @click="updateFilter(['preferencesPet', filter]); $emit('update')">{{ filter }}</span>
-        </div>
+        <p>click on legend to filter elements</p>
+        <span v-for="type in types" :key="type.id">
+            <v-btn
+                class="btn"
+                v-for="filter in filter[type]"
+                :key="filter.id"
+                small
+                @click="updateFilter([type, filter]); $emit('update')"
+            >
+                <v-icon left>mdi-close</v-icon>
+                <span>{{ filter }}</span>
+            </v-btn>
+        </span>
     </div>
 </template>
 
@@ -23,7 +23,9 @@ import { mapState, mapActions } from "vuex";
 export default {
     name: "Filters",
     data() {
-        return {};
+        return {
+            types: ["gender", "eyeColor", "preferencesFruit", "preferencesPet"]
+        };
     },
     props: {
         title: {
@@ -37,9 +39,7 @@ export default {
         })
     },
     methods: {
-        ...mapActions("people", [
-            "updateFilter"
-        ])
+        ...mapActions("people", ["updateFilter"])
     }
 };
 </script>

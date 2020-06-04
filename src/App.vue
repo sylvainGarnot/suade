@@ -19,7 +19,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -28,7 +28,7 @@ export default {
     color: white;
 }
 body {
-    background-color: #1f253d
+    background-color: #1f253d;
 }
 
 .data-bloc {
@@ -36,5 +36,9 @@ body {
     margin: 15px;
     border-radius: 5px;
     background: #394264;
+
+    .btn {
+        margin: 5px;
+    }
 }
 </style>

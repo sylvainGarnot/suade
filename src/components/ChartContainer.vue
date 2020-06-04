@@ -1,9 +1,21 @@
 <template>
-    <div class="data-bloc">
+    <div class="data-bloc" data-app>
         <h1>{{ title }}</h1>
+        
         <chart-pie v-if="localPieMode" :chart-data="chartData" :options="optionsPie" />
         <chart-bar v-else :chart-data="chartData" :options="optionsBar" />
-        <button @click="localPieMode = !localPieMode">{{ localPieMode ? 'Chart Bar' : 'Chart Pie'}}</button>
+
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    @click="localPieMode = !localPieMode"
+                    class="btn"
+                    small
+                    v-on="on"
+                >{{ localPieMode ? 'Chart Bar' : 'Chart Pie'}}</v-btn>
+            </template>
+            <span>Change chart mode</span>
+        </v-tooltip>
     </div>
 </template>
 
@@ -41,7 +53,7 @@ export default {
     props: {
         chartData: {
             type: Object,
-            default: null,
+            default: null
         },
         chartDataType: {
             type: String,
@@ -61,13 +73,11 @@ export default {
         ChartBar
     },
     methods: {
-        ...mapActions("people", [
-            "updateFilter"
-        ]),
+        ...mapActions("people", ["updateFilter"]),
         legendOnClick(e, legendItem) {
             if (this.chartDataType) {
-                this.updateFilter([this.chartDataType, legendItem.text])
-                this.$emit('update')
+                this.updateFilter([this.chartDataType, legendItem.text]);
+                this.$emit("update");
             }
         }
     }
