@@ -1,49 +1,56 @@
 <template>
-    <div>
-        <v-row no-gutters>
-            <v-col cols="12" sm="4">
-                <chart-container :chart-data="chartData.gender" :chart-data-type="'gender'" :pie-mode="true" :title="'Gender'" @update="fillCharts()" />
+    <v-row no-gutters>
+        <v-col cols="12" sm="3">
+            <chart-container
+                :chart-data="chartData.gender"
+                :chart-data-type="'gender'"
+                :pie-mode="true"
+                :title="'Gender'"
+                @update="fillCharts()"
+            />
 
-                <chart-container
-                    :chart-data="chartData.eyeColor"
-                    :chart-data-type="'eyeColor'"
-                    :pie-mode="false"
-                    :title="'Eyes Color'"
-                    @update="fillCharts()"
-                />
-            </v-col>
+            <chart-container
+                :chart-data="chartData.eyeColor"
+                :chart-data-type="'eyeColor'"
+                :pie-mode="false"
+                :title="'Eyes Color'"
+                @update="fillCharts()"
+            />
+        </v-col>
 
-            <v-col cols="12" sm="4">
-                <chart-container
-                    :chart-data="chartData.preferences.pet"
-                    :chart-data-type="'preferencesPet'"
-                    :pie-mode="false"
-                    :title="'Favorite Pet'"
-                    @update="fillCharts()"
-                />
+        <v-col cols="12" sm="3">
+            <chart-container
+                :chart-data="chartData.preferences.pet"
+                :chart-data-type="'preferencesPet'"
+                :pie-mode="false"
+                :title="'Favorite Pet'"
+                @update="fillCharts()"
+            />
 
-                <chart-container
-                    :chart-data="chartData.preferences.fruit"
-                    :chart-data-type="'preferencesFruit'"
-                    :pie-mode="true"
-                    :title="'Favorite Fruit'"
-                    @update="fillCharts()"
-                />
-            </v-col>
+            <chart-container
+                :chart-data="chartData.preferences.fruit"
+                :chart-data-type="'preferencesFruit'"
+                :pie-mode="true"
+                :title="'Favorite Fruit'"
+                @update="fillCharts()"
+            />
+        </v-col>
 
-            <v-col cols="12" sm="4">
-                <average-ages :people="peopleLocal" :title="'Average Age'" />
-
-                <filters :title="'Filters'" @update="fillCharts()" />
-            </v-col>
-        </v-row>
-    </div>
+        <v-col cols="12" sm="6">
+            <people-edit />
+            <people-list />
+            <average-ages :people="peopleLocal" :title="'Average Age'" />
+            <filters :title="'Filters'" @update="fillCharts()" />
+        </v-col>
+    </v-row>
 </template>
 
 <script>
 import ChartContainer from "../components/ChartContainer.vue";
 import AverageAges from "../components/AverageAges.vue";
 import Filters from "../components/Filters.vue";
+import PeopleEdit from "../components/PeopleEdit.vue";
+import PeopleList from "../components/PeopleList.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -51,7 +58,9 @@ export default {
     components: {
         AverageAges,
         ChartContainer,
-        Filters
+        Filters,
+        PeopleEdit,
+        PeopleList
     },
     computed: {
         ...mapState({
@@ -135,7 +144,7 @@ export default {
                     fruit: ["apple", "mango", "strawberry", "banana"],
                     pet: ["cat", "dog", "bird", "none"]
                 }
-            },
+            }
         };
     },
     mounted() {
@@ -162,25 +171,25 @@ export default {
             this.color.blue.dark,
             this.color.orange.dark,
             this.color.red.dark,
-            this.color.purple.dark,
+            this.color.purple.dark
         ];
         this.chartBorderColor.preferences.fruit = [
             this.color.blue.light,
             this.color.orange.light,
             this.color.red.light,
-            this.color.purple.light,
+            this.color.purple.light
         ];
         this.chartBackground.preferences.pet = [
             this.color.red.dark,
             this.color.green.dark,
             this.color.purple.dark,
-            this.color.orange.dark,
+            this.color.orange.dark
         ];
         this.chartBorderColor.preferences.pet = [
             this.color.red.light,
             this.color.green.light,
             this.color.purple.light,
-            this.color.orange.light,
+            this.color.orange.light
         ];
     },
     methods: {
@@ -201,11 +210,11 @@ export default {
             );
         },
         fillCharts() {
-            this.updatePeopleLocal()
-            this.fillChart("eyeColor")
-            this.fillChart("gender")
-            this.fillChartPreferences("fruit")
-            this.fillChartPreferences("pet")
+            this.updatePeopleLocal();
+            this.fillChart("eyeColor");
+            this.fillChart("gender");
+            this.fillChartPreferences("fruit");
+            this.fillChartPreferences("pet");
         },
         fillChart(property) {
             this.countData(property);
@@ -228,8 +237,12 @@ export default {
                 datasets: [
                     {
                         data: this.chartDataCount.preferences[property],
-                        backgroundColor: this.chartBackground.preferences[property],
-                        borderColor: this.chartBorderColor.preferences[property],
+                        backgroundColor: this.chartBackground.preferences[
+                            property
+                        ],
+                        borderColor: this.chartBorderColor.preferences[
+                            property
+                        ],
                         borderWidth: 2
                     }
                 ]
@@ -281,7 +294,7 @@ export default {
                     }
                 }
             }
-        },
+        }
     }
 };
 </script>

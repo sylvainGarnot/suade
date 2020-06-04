@@ -21,3 +21,9 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+   canvas {
+        height: 30vh;
+    }
+</style>

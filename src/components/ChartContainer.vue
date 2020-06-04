@@ -1,13 +1,14 @@
 <template>
     <div class="data-bloc" data-app>
         <h1>{{ title }}</h1>
-        
+
         <chart-pie v-if="localPieMode" :chart-data="chartData" :options="optionsPie" />
         <chart-bar v-else :chart-data="chartData" :options="optionsBar" />
 
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
+                    color="primary mt-2"
                     @click="localPieMode = !localPieMode"
                     class="btn"
                     small

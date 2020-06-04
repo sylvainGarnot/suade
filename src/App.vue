@@ -1,33 +1,33 @@
 <template>
     <div id="app">
-        <Header></Header>
-        <router-view />
+        <v-app id="inspire">
+            <!-- <Header></Header> -->
+            <router-view />
+        </v-app>
     </div>
 </template>
 
 
 <script>
-import Header from "@/components/Header.vue";
+// import Header from "@/components/Header.vue";
 
 export default {
     data() {
         return {};
     },
     components: {
-        Header
+        // Header
     }
 };
 </script>
 
 <style lang="scss">
-#app {
+#inspire, body {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: white;
-}
-body {
     background-color: #1f253d;
 }
 
