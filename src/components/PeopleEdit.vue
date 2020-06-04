@@ -4,6 +4,8 @@
 
         <v-simple-table dense dark>
             <tbody>
+
+                <!-- NAME -->
                 <tr>
                     <td class="text-left">name</td>
                     <td
@@ -31,6 +33,8 @@
                         @click:append-outer="validate('name')"
                     ></v-text-field>
                 </tr>
+
+                <!-- GENDER -->
                 <tr>
                     <td class="text-left">gender</td>
                     <td
@@ -39,13 +43,15 @@
                         @dblclick="edit('gender')"
                     >{{ peopleSelected['gender'] }}</td>
 
-                    <v-text-field
+                    <v-select
                         v-if="editMode['gender']"
                         class="mr-2"
                         v-model="peopleSelectedLocal['gender']"
+                        :items="['male', 'female']"
                         append-outer-icon="mdi-pencil"
                         autofocus
                         clearable
+                        dark
                         dense
                         filled
                         full-width
@@ -56,8 +62,104 @@
                         @keyup.esc="cancel('gender')"
                         @keyup.enter="validate('gender')"
                         @click:append-outer="validate('gender')"
-                    ></v-text-field>
+                    ></v-select>
                 </tr>
+
+                <!-- EYES COLOR -->
+                <tr>
+                    <td class="text-left">eyes color</td>
+                    <td
+                        v-if="!editMode['eyeColor']"
+                        class="text-left"
+                        @dblclick="edit('eyeColor')"
+                    >{{ peopleSelected['eyeColor'] }}</td>
+
+                    <v-select
+                        v-if="editMode['eyeColor']"
+                        class="mr-2"
+                        v-model="peopleSelectedLocal['eyeColor']"
+                        :items="['brown', 'blue', 'green']"
+                        append-outer-icon="mdi-pencil"
+                        autofocus
+                        clearable
+                        dark
+                        dense
+                        filled
+                        full-width
+                        hide-details
+                        rounded
+                        single-line
+                        @click:clear="cancel('eyeColor')"
+                        @keyup.esc="cancel('eyeColor')"
+                        @keyup.enter="validate('eyeColor')"
+                        @click:append-outer="validate('eyeColor')"
+                    ></v-select>
+                </tr>
+
+                <!-- Pet Preference -->
+                <tr>
+                    <td class="text-left">Favorite Pet</td>
+                    <td
+                        v-if="!editMode.preferences.pet"
+                        class="text-left"
+                        @dblclick="edit('preferences', 'pet')"
+                    >{{ typeof peopleSelected.preferences !== 'undefined' ? peopleSelected.preferences.pet : "" }}</td>
+
+                    <v-select
+                        v-if="editMode.preferences.pet"
+                        class="mr-2"
+                        v-model="peopleSelectedLocal.preferences.pet"
+                        :items="['cat', 'dog', 'bird', 'none']"
+                        append-outer-icon="mdi-pencil"
+                        autofocus
+                        clearable
+                        dark
+                        dense
+                        filled
+                        full-width
+                        hide-details
+                        rounded
+                        single-line
+                        @click:clear="cancel('preferences', 'pet')"
+                        @keyup.esc="cancel('preferences', 'pet')"
+                        @keyup.enter="validate('preferences', 'pet')"
+                        @click:append-outer="validate('preferences', 'pet')"
+                    ></v-select>
+                </tr>
+
+                <!-- Fruit Preference -->
+                <tr>
+                    <td class="text-left">Favorite Fruit</td>
+                    <td
+                        v-if="!editMode.preferences.fruit"
+                        class="text-left"
+                        @dblclick="edit('preferences', 'fruit')"
+                    >{{ typeof peopleSelected.preferences !== 'undefined' ? peopleSelected.preferences.fruit : "" }}</td>
+
+                    <v-select
+                        v-if="editMode.preferences.fruit"
+                        class="mr-2"
+                        v-model="peopleSelectedLocal.preferences.fruit"
+                        :items="['apple', 'mango', 'strawberry', 'banana']"
+                        append-outer-icon="mdi-pencil"
+                        autofocus
+                        clearable
+                        dark
+                        dense
+                        filled
+                        full-width
+                        hide-details
+                        rounded
+                        single-line
+                        @click:clear="cancel('preferences', 'fruit')"
+                        @keyup.esc="cancel('preferences', 'fruit')"
+                        @keyup.enter="validate('preferences', 'fruit')"
+                        @click:append-outer="validate('preferences', 'fruit')"
+                    ></v-select>
+                </tr>
+
+
+
             </tbody>
         </v-simple-table>
     </div>
@@ -72,10 +174,22 @@ export default {
         return {
             editMode: {
                 gender: false,
-                name: false
+                name: false,
+                eyeColor: false,
+                preferences: {
+                    fruit: false,
+                    pet: false
+                }
             },
-            peopleProperties: ["name", "gender"],
-            peopleSelectedLocal: {}
+            peopleSelectedLocal: {
+                gender: null,
+                name: null,
+                eyeColor: null,
+                preferences: {
+                    fruit: null,
+                    pet: null
+                }
+            }
         };
     },
     computed: {
@@ -90,22 +204,24 @@ export default {
     },
     methods: {
         ...mapActions("people", ["setPeopleSelected", "updatePeopleLocal"]),
-        cancel(property) {
-            this.editMode[property] = false
-            this.peopleSelectedLocal[property] = this.peopleSelected[property]
-            // console.log("cancel");
+        cancel(property, propertyBis) {
+            if (typeof propertyBis !== 'undefined') {
+                this.editMode[property][propertyBis] = false
+                this.peopleSelectedLocal[property][propertyBis] = this.peopleSelected[property][propertyBis]
+            } else {
+                this.editMode[property] = false
+                this.peopleSelectedLocal[property] = this.peopleSelected[property]
+            }
         },
-        edit(property) {
-            this.editMode.age = this.editMode.gender = this.editMode.name = false
-            this.editMode[property] = true
-            // console.log("edit");
+        edit(property, propertyBis) {
+            this.editMode.name = this.editMode.gender = this.editMode.eyeColor = false
+            typeof propertyBis !== 'undefined' ? this.editMode[property][propertyBis] = true : this.editMode[property] = true
         },
-        validate(property) {
-            this.editMode[property] = false
+        validate(property, propertyBis) {
+            typeof propertyBis !== 'undefined' ? this.editMode[property][propertyBis] = false : this.editMode[property]
             this.setPeopleSelected(this.peopleSelectedLocal)
             this.updatePeopleLocal()
             this.$emit("update")
-            // console.log("validate");
         }
     }
 };
