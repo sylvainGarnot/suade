@@ -1,10 +1,9 @@
 <template>
-    <div class="data-bloc">
+    <div class="data-bloc" id="people-edit">
         <h1>Edit</h1>
 
         <v-simple-table dense dark>
             <tbody>
-
                 <!-- NAME -->
                 <tr>
                     <td class="text-left">name</td>
@@ -29,8 +28,8 @@
                         single-line
                         @click:clear="cancel('name')"
                         @keyup.esc="cancel('name')"
-                        @keyup.enter="validate('name')"
-                        @click:append-outer="validate('name')"
+                        @keyup.enter="validate"
+                        @click:append-outer="validate"
                     ></v-text-field>
                 </tr>
 
@@ -60,8 +59,9 @@
                         single-line
                         @click:clear="cancel('gender')"
                         @keyup.esc="cancel('gender')"
-                        @keyup.enter="validate('gender')"
-                        @click:append-outer="validate('gender')"
+                        @keyup.enter="validate"
+                        @click:append-outer="validate"
+                        @change="validate"
                     ></v-select>
                 </tr>
 
@@ -91,8 +91,9 @@
                         single-line
                         @click:clear="cancel('eyeColor')"
                         @keyup.esc="cancel('eyeColor')"
-                        @keyup.enter="validate('eyeColor')"
-                        @click:append-outer="validate('eyeColor')"
+                        @keyup.enter="validate"
+                        @click:append-outer="validate"
+                        @change="validate"
                     ></v-select>
                 </tr>
 
@@ -122,8 +123,9 @@
                         single-line
                         @click:clear="cancel('preferences', 'pet')"
                         @keyup.esc="cancel('preferences', 'pet')"
-                        @keyup.enter="validate('preferences', 'pet')"
-                        @click:append-outer="validate('preferences', 'pet')"
+                        @keyup.enter="validate"
+                        @click:append-outer="validate"
+                        @change="validate"
                     ></v-select>
                 </tr>
 
@@ -153,13 +155,11 @@
                         single-line
                         @click:clear="cancel('preferences', 'fruit')"
                         @keyup.esc="cancel('preferences', 'fruit')"
-                        @keyup.enter="validate('preferences', 'fruit')"
-                        @click:append-outer="validate('preferences', 'fruit')"
+                        @keyup.enter="validate"
+                        @click:append-outer="validate"
+                        @change="validate"
                     ></v-select>
                 </tr>
-
-
-
             </tbody>
         </v-simple-table>
     </div>
@@ -195,30 +195,39 @@ export default {
     computed: {
         ...mapState({
             peopleSelected: state => state.people.selected
-        }),
+        })
     },
     watch: {
-        peopleSelected: function () {
+        peopleSelected: function() {
             Object.assign(this.peopleSelectedLocal, this.peopleSelected)
+            this.editModeDisable()
         }
     },
     methods: {
         ...mapActions("people", ["setPeopleSelected", "updatePeopleLocal"]),
         cancel(property, propertyBis) {
-            if (typeof propertyBis !== 'undefined') {
-                this.editMode[property][propertyBis] = false
-                this.peopleSelectedLocal[property][propertyBis] = this.peopleSelected[property][propertyBis]
+             this.editModeDisable()
+            if (typeof propertyBis !== "undefined") {
+                this.peopleSelectedLocal[property][
+                    propertyBis
+                ] = this.peopleSelected[property][propertyBis];
             } else {
-                this.editMode[property] = false
-                this.peopleSelectedLocal[property] = this.peopleSelected[property]
+                this.peopleSelectedLocal[property] = this.peopleSelected[
+                    property
+                ];
             }
         },
-        edit(property, propertyBis) {
-            this.editMode.name = this.editMode.gender = this.editMode.eyeColor = false
-            typeof propertyBis !== 'undefined' ? this.editMode[property][propertyBis] = true : this.editMode[property] = true
+        editModeDisable() {
+            this.editMode.name = this.editMode.gender = this.editMode.eyeColor = this.editMode.preferences.fruit = this.editMode.preferences.pet = false
         },
-        validate(property, propertyBis) {
-            typeof propertyBis !== 'undefined' ? this.editMode[property][propertyBis] = false : this.editMode[property]
+        edit(property, propertyBis) {
+            this.editModeDisable()
+            typeof propertyBis !== "undefined"
+                ? (this.editMode[property][propertyBis] = true)
+                : (this.editMode[property] = true)
+        },
+        validate() {
+            this.editModeDisable()
             this.setPeopleSelected(this.peopleSelectedLocal)
             this.updatePeopleLocal()
             this.$emit("update")
@@ -226,3 +235,17 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+#people-edit {
+    .v-text-field, .v-select {
+        height: 24px;
+        .v-input__slot {
+            min-height: 24px !important;
+        }
+        .v-input__append-inner, .v-input__append-outer {
+            margin-top: 0 !important;
+        }
+    }
+}
+</style>

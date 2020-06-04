@@ -5,7 +5,9 @@
         <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
+            class="mb-2"
             label="Search"
+            outlined
             single-line
             hide-details
         ></v-text-field>
@@ -70,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.data-bloc {
-    height: 60vh;
+.v-data-table {
+    min-height: 152px;
 }
 </style>

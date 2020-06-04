@@ -1,6 +1,6 @@
 <template>
     <v-row no-gutters>
-        <v-col cols="12" sm="3">
+        <v-col sm="3">
             <chart-container
                 :chart-data="chartData.gender"
                 :chart-data-type="'gender'"
@@ -18,7 +18,7 @@
             />
         </v-col>
 
-        <v-col cols="12" sm="3">
+        <v-col sm="3">
             <chart-container
                 :chart-data="chartData.preferences.pet"
                 :chart-data-type="'preferencesPet'"
@@ -36,11 +36,18 @@
             />
         </v-col>
 
-        <v-col cols="12" sm="6">
+        <v-col sm="6">
+            <v-row no-gutters>
+                <v-col sm="3">
+                    <average-ages :people="peopleLocal" :title="'Average Age'" />
+                </v-col>
+                <v-col sm="9">
+                    <filters :title="'Filters'" @update="fillCharts()" />
+                </v-col>
+            </v-row>
+
             <people-edit @update="fillCharts()" />
             <people-search />
-            <average-ages :people="peopleLocal" :title="'Average Age'" />
-            <filters :title="'Filters'" @update="fillCharts()" />
         </v-col>
     </v-row>
 </template>
@@ -297,3 +304,9 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.data-bloc {
+    min-height: 156px;
+}
+</style>
