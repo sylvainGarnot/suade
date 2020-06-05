@@ -26,8 +26,8 @@
                         hide-details
                         rounded
                         single-line
-                        @click:clear="cancel('name')"
-                        @keyup.esc="cancel('name')"
+                        @click:clear="cancel"
+                        @keyup.esc="cancel"
                         @keyup.enter="validate"
                         @click:append-outer="validate"
                     ></v-text-field>
@@ -57,8 +57,8 @@
                         hide-details
                         rounded
                         single-line
-                        @click:clear="cancel('gender')"
-                        @keyup.esc="cancel('gender')"
+                        @click:clear="cancel"
+                        @keyup.esc="cancel"
                         @keyup.enter="validate"
                         @click:append-outer="validate"
                         @change="validate"
@@ -89,8 +89,8 @@
                         hide-details
                         rounded
                         single-line
-                        @click:clear="cancel('eyeColor')"
-                        @keyup.esc="cancel('eyeColor')"
+                        @click:clear="cancel"
+                        @keyup.esc="cancel"
                         @keyup.enter="validate"
                         @click:append-outer="validate"
                         @change="validate"
@@ -121,8 +121,8 @@
                         hide-details
                         rounded
                         single-line
-                        @click:clear="cancel('preferences', 'pet')"
-                        @keyup.esc="cancel('preferences', 'pet')"
+                        @click:clear="cancel"
+                        @keyup.esc="cancel"
                         @keyup.enter="validate"
                         @click:append-outer="validate"
                         @change="validate"
@@ -153,8 +153,8 @@
                         hide-details
                         rounded
                         single-line
-                        @click:clear="cancel('preferences', 'fruit')"
-                        @keyup.esc="cancel('preferences', 'fruit')"
+                        @click:clear="cancel"
+                        @keyup.esc="cancel"
                         @keyup.enter="validate"
                         @click:append-outer="validate"
                         @change="validate"
@@ -204,18 +204,10 @@ export default {
         }
     },
     methods: {
-        ...mapActions("people", ["setPeopleSelected", "updatePeopleLocal"]),
-        cancel(property, propertyBis) {
-             this.editModeDisable()
-            if (typeof propertyBis !== "undefined") {
-                this.peopleSelectedLocal[property][
-                    propertyBis
-                ] = this.peopleSelected[property][propertyBis];
-            } else {
-                this.peopleSelectedLocal[property] = this.peopleSelected[
-                    property
-                ];
-            }
+        ...mapActions("people", ["setPeopleSelected", "updatePeopleFiltered"]),
+        cancel() {
+            Object.assign(this.peopleSelectedLocal, this.peopleSelected)
+            this.editModeDisable()
         },
         editModeDisable() {
             this.editMode.name = this.editMode.gender = this.editMode.eyeColor = this.editMode.preferences.fruit = this.editMode.preferences.pet = false
@@ -228,9 +220,10 @@ export default {
         },
         validate() {
             this.editModeDisable()
-            this.setPeopleSelected(this.peopleSelectedLocal)
-            this.updatePeopleLocal()
-            this.$emit("update")
+            let newValue = {}
+            Object.assign(newValue, this.peopleSelectedLocal)
+            this.setPeopleSelected(newValue)
+            this.updatePeopleFiltered()
         }
     }
 };

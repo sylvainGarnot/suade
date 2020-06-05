@@ -6,7 +6,6 @@
                 :chart-data-type="'gender'"
                 :pie-mode="true"
                 :title="'Gender'"
-                @update="fillCharts()"
             />
 
             <chart-container
@@ -14,7 +13,6 @@
                 :chart-data-type="'eyeColor'"
                 :pie-mode="false"
                 :title="'Eyes Color'"
-                @update="fillCharts()"
             />
         </v-col>
 
@@ -24,7 +22,6 @@
                 :chart-data-type="'preferencesPet'"
                 :pie-mode="false"
                 :title="'Favorite Pet'"
-                @update="fillCharts()"
             />
 
             <chart-container
@@ -32,21 +29,20 @@
                 :chart-data-type="'preferencesFruit'"
                 :pie-mode="true"
                 :title="'Favorite Fruit'"
-                @update="fillCharts()"
             />
         </v-col>
 
         <v-col sm="6">
             <v-row no-gutters>
                 <v-col sm="3">
-                    <average-ages :people="peopleLocal" :title="'Average Age'" />
+                    <average-ages />
                 </v-col>
                 <v-col sm="9">
-                    <filters :title="'Filters'" @update="fillCharts()" />
+                    <filters />
                 </v-col>
             </v-row>
 
-            <people-edit @update="fillCharts()" />
+            <people-edit />
             <people-search />
         </v-col>
     </v-row>
@@ -72,8 +68,16 @@ export default {
     computed: {
         ...mapState({
             people: state => state.people.all,
-            peopleLocal: state => state.people.local
+            peopleFiltered: state => state.people.filtered
         })
+    },
+    watch: {
+        peopleFiltered: {
+            handler() {
+                this.fillCharts()
+            },
+            deep: true,
+        }
     },
     data() {
         return {
@@ -154,7 +158,7 @@ export default {
         };
     },
     mounted() {
-        this.fetchData();
+        this.fetchData()
         this.chartBackground.eyeColor = [
             this.color.orange.dark,
             this.color.blue.dark,
@@ -201,14 +205,14 @@ export default {
     methods: {
         ...mapActions("people", [
             "setPeople",
-            "updatePeopleLocal",
-            "updateFilter"
+            "updatePeopleFiltered"
         ]),
         fetchData() {
             this.$http.get("files/people.json").then(
                 response => {
                     this.setPeople(response.body);
-                    this.fillCharts();
+                    this.updatePeopleFiltered()
+                    this.fillCharts()
                 },
                 response => {
                     console.log("error", response);
@@ -216,7 +220,6 @@ export default {
             );
         },
         fillCharts() {
-            this.updatePeopleLocal();
             this.fillChart("eyeColor");
             this.fillChart("gender");
             this.fillChartPreferences("fruit");
@@ -262,7 +265,7 @@ export default {
             ) {
                 this.chartDataCount[property][index] = 0;
             }
-            for (const person of this.peopleLocal) {
+            for (const person of this.peopleFiltered) {
                 for (
                     let index = 0;
                     index < this.chartLabels[property].length;
@@ -285,7 +288,7 @@ export default {
             ) {
                 this.chartDataCount.preferences[property][index] = 0;
             }
-            for (const person of this.peopleLocal) {
+            for (const person of this.peopleFiltered) {
                 for (
                     let index = 0;
                     index < this.chartLabels.preferences[property].length;

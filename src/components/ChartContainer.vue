@@ -8,7 +8,7 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    color="primary mt-2"
+                    color="primary mt-5"
                     @click="localPieMode = !localPieMode"
                     class="btn"
                     small
@@ -78,9 +78,14 @@ export default {
         legendOnClick(e, legendItem) {
             if (this.chartDataType) {
                 this.updateFilter([this.chartDataType, legendItem.text]);
-                this.$emit("update");
             }
         }
     }
 };
 </script>
+
+<style lang="scss">
+    .data-bloc canvas {
+        height: 30vh !important;
+    }
+</style>

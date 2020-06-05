@@ -1,6 +1,6 @@
 <template>
     <div class="data-bloc">
-        <h1>{{ title }}</h1>
+        <h1>Filters</h1>
         <p>click on legend to filter elements</p>
         <span v-for="type in types" :key="type.id">
             <v-btn
@@ -8,7 +8,7 @@
                 v-for="filter in filter[type]"
                 :key="filter.id"
                 small
-                @click="updateFilter([type, filter]); $emit('update')"
+                @click="updateFilter([type, filter])"
             >
                 <v-icon left>mdi-close</v-icon>
                 <span>{{ filter }}</span>
@@ -26,12 +26,6 @@ export default {
         return {
             types: ["gender", "eyeColor", "preferencesFruit", "preferencesPet"]
         };
-    },
-    props: {
-        title: {
-            type: String,
-            default: null
-        }
     },
     computed: {
         ...mapState({

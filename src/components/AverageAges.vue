@@ -1,33 +1,28 @@
 <template>
     <div class="data-bloc">
-        <h1>{{ title }}</h1>
+        <h1>Average Age</h1>
         <span>{{ averageAge }}</span>
     </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
     name: "AverageAges",
     data() {
         return {};
     },
-    props: {
-        people: {
-            type: Array,
-            default: Array
-        },
-        title: {
-            type: String,
-            default: null
-        }
-    },
     computed: {
+        ...mapState({
+            peopleFiltered: state => state.people.filtered
+        }),
         averageAge() {
             let result = 0
-            for (const p of this.people) {
+            for (const p of this.peopleFiltered) {
                 result += p.age;
             }
-            return (result / this.people.length).toFixed(0);
+            return (result / this.peopleFiltered.length).toFixed(0);
         }
     }
 };

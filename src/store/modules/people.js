@@ -1,7 +1,7 @@
 // init state
 const state = () => ({
     all: [],
-    local: [],
+    filtered: [],
     filter: {
         eyeColor: [],
         gender: [],
@@ -25,18 +25,20 @@ const actions = {
     },
     setPeopleSelected({
         commit,
-        state
+        state,
+        dispatch
     }, value) {
         commit('setPeopleSelected', {
             value: value
         })
-        for (let index = 0; index < state.local.length; index++) {
-            if (state.local[index]._id === value._id) {
-                commit('setPeopleById', { id: index, value: value } )
+        for (let index = 0; index < state.all.length; index++) {
+            if (state.all[index]._id === value._id) {
+                commit('setPeopleById', { index: index, value: value } )
+                dispatch('updatePeopleFiltered');
             }
         }
     },
-    updatePeopleLocal({
+    updatePeopleFiltered({
         commit,
         state
     }) {
@@ -53,13 +55,14 @@ const actions = {
                 result.push(p);
             }
         }
-        commit('setPeopleLocal', {
+        commit('setPeopleFiltered', {
             value: result
         })
     },
     updateFilter({
         commit,
-        state
+        state,
+        dispatch
     }, value) {
         const property = value[0]
         const content = value[1]
@@ -80,6 +83,7 @@ const actions = {
                 }
             }
         }
+        dispatch('updatePeopleFiltered');
     },
 }
 
@@ -91,15 +95,15 @@ const mutations = {
         state.all = value
     },
     setPeopleById(state, {
-        id,
+        index,
         value
     }) {
-        state.all.splice(id, 1, value)
+        state.all.splice(index, 1, value)
     },
-    setPeopleLocal(state, {
+    setPeopleFiltered(state, {
         value
     }) {
-        state.local = value
+        state.filtered = value
     },
     setPeopleSelected(state, {
         value

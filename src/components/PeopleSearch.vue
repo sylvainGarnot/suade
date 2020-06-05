@@ -18,8 +18,8 @@
             dense
             hide-default-footer
             :headers="headers"
-            :items="peopleLocal"
-            :items-per-page="5"
+            :items="peopleFiltered"
+            :items-per-page="10"
             :page.sync="page"
             :search="search"
             @click:row="setPeopleSelected($event)"
@@ -46,19 +46,19 @@ export default {
             ],
             page: 1,
             pageCount: 0,
-            search: ""
+            search: "",
+            peopleFilteredLocal: {}
         };
     },
     computed: {
         ...mapState({
-            peopleLocal: state => state.people.local
+            peopleFiltered: state => state.people.filtered
         })
     },
     watch: {
-        peopleLocal: {
+        peopleFiltered: {
             handler() {
-            // handler(val, oldVal) {
-                console.log('The list of colours has changed!');
+                this.peopleFilteredLocal = this.peopleFiltered
             },
             deep: true,
         }
