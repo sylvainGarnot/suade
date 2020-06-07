@@ -1,5 +1,7 @@
 <p align="center"><a href="https://vuejs.org" target="_blank" rel="noopener noreferrer"><img width="100" src="https://vuejs.org/images/logo.png" alt="Vue logo"></a></p>
 
+<p align="center"><a href="https://vuejs.org" target="_blank" rel="noopener noreferrer"><img width="100" src="https://i.ibb.co/ph94Q5r/Capture-d-e-cran-2020-06-07-a-22-21-19.png" alt="Vue logo"></a></p>
+
 # Suade Labs - JS Challenge 2020
 
 ### Project setup
